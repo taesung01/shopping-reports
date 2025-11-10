@@ -1,0 +1,181 @@
+
+    <html>
+    <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="UTF-8">
+      <style>
+        /* 이메일 스타일 정의 */
+        body { font-family: 'Malgun Gothic', '맑은 고딕', sans-serif; line-height: 1.7; color: #333333; background-color: #f4f7f6; margin: 0; padding: 0; }
+        .container { max-width: 750px; margin: 20px auto; background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+        .header { background-color: #4a90e2; padding: 25px 30px; color: white; border-bottom: 4px solid #357abd; }
+        .header h1 { margin: 0; font-size: 24px; font-weight: 600; }
+        .header p { margin: 8px 0 0; font-size: 14px; opacity: 0.9; }
+        .content { padding: 30px; }
+        .section { margin-bottom: 30px; padding: 20px; background-color: #fdfdfd; border: 1px solid #eeeeee; border-radius: 6px; }
+        .section-title { color: #357abd; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; margin-top: 0; margin-bottom: 20px; font-size: 18px; font-weight: 600; }
+        .footer { padding: 20px 30px; text-align: center; font-size: 12px; color: #888888; background-color: #f8f8f8; border-top: 1px solid #e0e0e0; }
+        .stat-box { display: inline-block; background-color: #eaf2fa; padding: 12px 18px; margin-right: 10px; margin-bottom: 10px; border-radius: 5px; text-align: center; min-width: 110px; border: 1px solid #d1e0f1; }
+        .stat-box div:first-child { font-size: 22px; font-weight: bold; color: #357abd; margin-bottom: 3px; }
+        .stat-box div:last-child { font-size: 13px; color: #555; }
+        .insights-section { background-color: #f9f9f9; padding: 20px; border-left: 5px solid #4a90e2; border-radius: 5px; }
+        .comment-examples { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 20px; } /* flex 레이아웃 */
+        .comment-column { flex: 1; min-width: 250px; } /* 컬럼 너비 자동 조절 */
+        .column-title { font-weight: bold; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid #dddddd; font-size: 15px; color: #333; }
+        .chart-container { text-align: center; margin: 25px 0; } /* 차트 중앙 정렬 */
+        .chart-container img { max-width: 100%; height: auto; border: 1px solid #e0e0e0; border-radius: 4px; } /* 차트 이미지 스타일 */
+        .warning { color: #D32F2F; font-weight: bold; background-color: #FFEBEE; padding: 10px; border-radius: 4px; border: 1px solid #FFCDD2; margin-top: 15px; font-size: 13px; } /* 경고 메시지 스타일 */
+        .sentiment-bar-container { display: flex; margin: 25px 0; background-color: #f0f0f0; border-radius: 5px; overflow: hidden; height: 25px; border: 1px solid #ddd; } /* 감정 막대 컨테이너 */
+        .sentiment-bar-segment { display: flex; align-items: center; justify-content: center; font-size: 12px; color: white; font-weight: bold; } /* 감정 막대 세그먼트 */
+        .sentiment-label-container { display: flex; justify-content: space-around; font-size: 13px; text-align: center; width: 100%; margin-top: 10px; } /* 감정 텍스트 레이블 컨테이너 - 수정됨 */
+        .sentiment-label-item { flex: 1; text-align: center; } /* 감정 텍스트 레이블 아이템 - 수정됨 */
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1>유튜브 댓글 탐정 심층분석 보고서 🕵️‍♂️</h1>
+          <p>시청자 반응과 숨겨진 인사이트를 자동으로 분석했습니다!</p>
+        </div>
+        <div class="content">
+          
+          <div class="section">
+            <h2 class="section-title">📊 영상 기본 정보</h2>
+            <p><strong>제목:</strong> LG's Blockbuster Debut Highlights India's Rapidly Expanding IPO Market | Vantage with Palki Sharma</p>
+            <!-- 변경 시작: 영상 URL 변수 삽입 -->
+            <p><strong>영상 URL:</strong> <a href="https://www.youtube.com/watch?v=Gr066WRh_Q8" style="color: #1a73e8; text-decoration: none;" target="_blank">https://www.youtube.com/watch?v=Gr066WRh_Q8</a></p>
+            <!-- 변경 끝 -->
+            <p><strong>게시일:</strong> 2025년 10월 15일</p>
+            <div style="margin-top: 20px;">
+              <div class="stat-box"><div>118,517</div><div>조회수</div></div>
+              <div class="stat-box"><div>2,398</div><div>좋아요</div></div>
+              <div class="stat-box"><div>129</div><div>총 댓글 수</div></div>
+            </div>
+          </div>
+          
+          <div class="section">
+            <h2 class="section-title">💬 댓글 감정 분석</h2>
+            <p>총 129개의 댓글 중 <strong>74개</strong>를 분석했습니다.</p>
+            <div class="sentiment-bar-container">
+              <div class="sentiment-bar-segment" style="background-color: #4CAF50; width: 43.24%;" title="긍정: 43.24%"></div>
+              <div class="sentiment-bar-segment" style="background-color: #F44336; width: 28.38%;" title="부정: 28.38%"></div>
+              <div class="sentiment-bar-segment" style="background-color: #9E9E9E; width: 28.38%;" title="중립: 28.38%"></div>
+            </div>
+            <div class="sentiment-label-container">
+              <div class="sentiment-label-item"><strong>긍정:</strong><br>32개 (43.24%)</div>
+              <div class="sentiment-label-item"><strong>부정:</strong><br>21개 (28.38%)</div>
+              <div class="sentiment-label-item"><strong>중립:</strong><br>21개 (28.38%)</div>
+            </div>
+            <div class="comment-examples">
+              <div class="comment-column"><div class="column-title">😃 긍정적 댓글 예시 (최대 5개)</div>
+    <div style="margin-bottom: 8px; padding: 8px; background-color: #e6f4ea; border-left: 3px solid #4CAF50; border-radius: 3px;">
+      <p style="margin: 0; font-size: 13px;">Hai 🕉 haree krishna haree krishna hai radhe radhe hai 🕉 veri nice supper the good company and 🕉...HUOSE TV..20..no..problem...good TV LG....the company......perfect good...the world hai 🕉</p>
+    </div>
+    <div style="margin-bottom: 8px; padding: 8px; background-color: #e6f4ea; border-left: 3px solid #4CAF50; border-radius: 3px;">
+      <p style="margin: 0; font-size: 13px;">Palki is finally back!!! No more clickbait videos from firstpost.</p>
+    </div>
+    <div style="margin-bottom: 8px; padding: 8px; background-color: #e6f4ea; border-left: 3px solid #4CAF50; border-radius: 3px;">
+      <p style="margin: 0; font-size: 13px;">While our neighbours are busy in their flights we are making money that&#39;s is what a great country does 🇮🇳❤️</p>
+    </div>
+    <div style="margin-bottom: 8px; padding: 8px; background-color: #e6f4ea; border-left: 3px solid #4CAF50; border-radius: 3px;">
+      <p style="margin: 0; font-size: 13px;">Every electronic appliance in all my houses are of L.G. running inspite of periodic servicing for the last ten years. They are indeed LIFES GOOD. This is a life lesson for any foreign company wanting to operate in India, it is like a marriage you should invest and wait be patient for a long long time. It will be worth it in the long run. PERIOD.</p>
+    </div>
+    <div style="margin-bottom: 8px; padding: 8px; background-color: #e6f4ea; border-left: 3px solid #4CAF50; border-radius: 3px;">
+      <p style="margin: 0; font-size: 13px;">❤</p>
+    </div></div>
+              <div class="comment-column"><div class="column-title">😞 부정적 댓글 예시 (최대 5개)</div>
+    <div style="margin-bottom: 8px; padding: 8px; background-color: #fce8e6; border-left: 3px solid #F44336; border-radius: 3px;">
+      <p style="margin: 0; font-size: 13px;">Ab tere me dum ni ki ek episode banaye petrol price pe kuki paisa kha rhi tu bhi</p>
+    </div>
+    <div style="margin-bottom: 8px; padding: 8px; background-color: #fce8e6; border-left: 3px solid #F44336; border-radius: 3px;">
+      <p style="margin: 0; font-size: 13px;">Rahul gandhi - 😂 dead economy <a href="https://www.youtube.com/watch?v=Gr066WRh_Q8&amp;t=71">1:11</a></p>
+    </div>
+    <div style="margin-bottom: 8px; padding: 8px; background-color: #fce8e6; border-left: 3px solid #F44336; border-radius: 3px;">
+      <p style="margin: 0; font-size: 13px;">It’s not a good company at all. It makes us slaves and releases toxic fumes at night. Remember the LG Polymer gas leak you might have not even heard of it. It killed 13 people and 1000 got affected with the gas. They evaded environmental laws and release every night. And the worst part — the money they earn here doesn’t even stay in India, it goes straight to their Korean headquarters. This IPO money raised not for Indian unit for their parent company check that first
+ 
+ My village is near that plant, and I still remember how it all happened during corona. They covered it up. The Visakhapatnam gas leak was one of the worst after Bhopal, but the media barely cared.
+ 
+ And don’t even get me started on those factories here in AP. In Kia factories, they hardly give Indians proper jobs only lower-end screw-fitting work. In Anantapur, they even have Korean-only colonies and restaurants where only Koreans are allowed. This is how they treat us in our own country like pure imperialist(like how britisher have done).
+ 
+ People should stop blindly supporting them. We have good Indian companies like Voltas and Geko too. I use Voltas side by side fridge and AC myself works well and is cheaper than LG. We should support Indian brands, make them global, and stop letting these companies exploit us.</p>
+    </div>
+    <div style="margin-bottom: 8px; padding: 8px; background-color: #fce8e6; border-left: 3px solid #F44336; border-radius: 3px;">
+      <p style="margin: 0; font-size: 13px;">Hello ma&#39;am sometime talk about the garbage In India. Everyday the garbage is increasing in the streets of every city of india and not proper plan by the state government or the central government 🤮🤮🤮🤮🤮</p>
+    </div>
+    <div style="margin-bottom: 8px; padding: 8px; background-color: #fce8e6; border-left: 3px solid #F44336; border-radius: 3px;">
+      <p style="margin: 0; font-size: 13px;">Hii Guys don&#39;t been happy on listing the companies because this South Korean companies are raising money in India and sending the money back to south korea so this is OFS (offer for sale)  it means the existing promoters selling the share for example Hyundia India ,LG India  Investor Should Aware of this companies specially this south korea companies</p>
+    </div></div>
+            </div>
+          </div>
+          <div class="section">
+            <h2 class="section-title">🔍 주요 토픽 분석</h2>
+            <p>시청자들이 가장 많이 언급한 주제 (상위 6개):</p>
+            <!-- 변경 시작: 토픽 차트 URL 변수 삽입 -->
+            <div class="chart-container"><img src="https://quickchart.io/chart?w=550&h=250&f=png&c=%7B%22type%22%3A%22horizontalBar%22%2C%22data%22%3A%7B%22labels%22%3A%5B%22LG%22%2C%22India%22%2C%22Palki%22%2C%22Investment%22%2C%22Economy%22%2C%22Stock%20Market%22%5D%2C%22datasets%22%3A%5B%7B%22label%22%3A%22%EC%96%B8%EA%B8%89%EB%9F%89%22%2C%22data%22%3A%5B15%2C10%2C8%2C6%2C5%2C4%5D%2C%22backgroundColor%22%3A%5B%22rgba(30%2C%20136%2C%20229%2C%200.7)%22%2C%22rgba(67%2C%20160%2C%2071%2C%200.7)%22%2C%22rgba(251%2C%20140%2C%200%2C%200.7)%22%2C%22rgba(142%2C%2036%2C%20170%2C%200.7)%22%2C%22rgba(253%2C%20216%2C%2053%2C%200.7)%22%2C%22rgba(120%2C%20144%2C%20156%2C%200.7)%22%5D%2C%22borderColor%22%3A%5B%22rgba(30%2C%20136%2C%20229%2C%201)%22%2C%22rgba(67%2C%20160%2C%2071%2C%201)%22%2C%22rgba(251%2C%20140%2C%200%2C%201)%22%2C%22rgba(142%2C%2036%2C%20170%2C%201)%22%2C%22rgba(253%2C%20216%2C%2053%2C%201)%22%2C%22rgba(120%2C%20144%2C%20156%2C%201)%22%5D%2C%22borderWidth%22%3A1%7D%5D%7D%2C%22options%22%3A%7B%22title%22%3A%7B%22display%22%3Atrue%2C%22text%22%3A%22%EC%A3%BC%EC%9A%94%20%ED%86%A0%ED%94%BD%20%EC%96%B8%EA%B8%89%20%EB%B9%88%EB%8F%84%20(%EC%83%81%EC%9C%84%206%EA%B0%9C)%22%7D%2C%22legend%22%3A%7B%22display%22%3Afalse%7D%2C%22scales%22%3A%7B%22xAxes%22%3A%5B%7B%22ticks%22%3A%7B%22beginAtZero%22%3Atrue%7D%7D%5D%7D%7D%7D" alt="주요 토픽 막대그래프"></div>
+            <!-- 변경 끝 -->
+            <div style="margin-top: 15px; padding-left: 10px; border-left: 3px solid #eee;"><p style="margin: 5px 0;"><strong>LG:</strong> 15회 언급</p><p style="margin: 5px 0;"><strong>India:</strong> 10회 언급</p><p style="margin: 5px 0;"><strong>Palki:</strong> 8회 언급</p><p style="margin: 5px 0;"><strong>Investment:</strong> 6회 언급</p><p style="margin: 5px 0;"><strong>Economy:</strong> 5회 언급</p><p style="margin: 5px 0;"><strong>Stock Market:</strong> 4회 언급</p></div>
+          </div>
+          <div class="section">
+            <h2 class="section-title">☁️ 댓글 키워드 워드클라우드</h2>
+            <p>댓글에서 자주 사용된 단어 시각화:</p>
+            <!-- 변경 시작: 워드클라우드 URL 변수 삽입 -->
+            <div class="chart-container"><img src="https://quickchart.io/wordcloud?text=Welcome%20back%20palki%20Please%20express%20amounts%20in%20both%20Rupees%20and%20dollars%20Your%20audience%20is%20both%20Indian%20and%20foreign%20Today%20was%20going%20to%20file%20missing%20case%20But%20then%20checked%20the%20video%20and%20heard%20the%20voice%20got%20relieved%20Thank%20god%20Thankyou%20palki%20mam%20You%20are%20back%20Welcome%20back%20mam%20welcome%20back%20mam%20good%20to%20see%20you%20back%20Now%20finally%20can%20watch%20all%20the%20episodes%20Welcome%20back%20Palki%20Sharma%20We%20missed%20your%20reporting%20Been%20Fan%20of%20LG%20LG%20Applied%20lot%2013%20shares%20and%20got%20allotment%20in%20LG%20IPO%20holding%20for%20long%20term%20and%20add%20few%20more%20on%20dips%20Hope%20more%20and%20more%20Indian%20brands%20go%20global%20and%20dominate%20the%20world&width=550&height=300&format=png&fontScale=15&rotation=0" alt="워드클라우드"></div>
+            <!-- 변경 끝 -->
+          </div>
+          <div class="section">
+            <h2 class="section-title">⭐ 인기 댓글 TOP 10</h2>
+            <p>좋아요를 많이 받은 댓글 (좋아요 5개 이상 기준):</p>
+            <div style="margin-top: 15px;">
+    <div style="margin-bottom: 10px; padding: 10px; background-color: #f0f4f8; border-left: 4px solid #4a90e2; border-radius: 4px;">
+      <p style="margin: 0; font-size: 14px;"><strong>#1:</strong> Welcome back palki</p>
+      <p style="margin: 5px 0 0; font-size: 12px; color: #555;">👍 187개</p>
+    </div>
+    <div style="margin-bottom: 10px; padding: 10px; background-color: #f0f4f8; border-left: 4px solid #4a90e2; border-radius: 4px;">
+      <p style="margin: 0; font-size: 14px;"><strong>#2:</strong> Please express amounts in both Rupees and dollars. Your audience is both Indian and foreign.</p>
+      <p style="margin: 5px 0 0; font-size: 12px; color: #555;">👍 141개</p>
+    </div>
+    <div style="margin-bottom: 10px; padding: 10px; background-color: #f0f4f8; border-left: 4px solid #4a90e2; border-radius: 4px;">
+      <p style="margin: 0; font-size: 14px;"><strong>#3:</strong> Today i was going to file a missing case. But then i checked the video and i heard the voice😅😄  got relieved. Thank god. Thankyou palki mam. You are back !!😊</p>
+      <p style="margin: 5px 0 0; font-size: 12px; color: #555;">👍 136개</p>
+    </div>
+    <div style="margin-bottom: 10px; padding: 10px; background-color: #f0f4f8; border-left: 4px solid #4a90e2; border-radius: 4px;">
+      <p style="margin: 0; font-size: 14px;"><strong>#4:</strong> Welcome back mam :)</p>
+      <p style="margin: 5px 0 0; font-size: 12px; color: #555;">👍 82개</p>
+    </div>
+    <div style="margin-bottom: 10px; padding: 10px; background-color: #f0f4f8; border-left: 4px solid #4a90e2; border-radius: 4px;">
+      <p style="margin: 0; font-size: 14px;"><strong>#5:</strong> welcome back mam good to see you back</p>
+      <p style="margin: 5px 0 0; font-size: 12px; color: #555;">👍 42개</p>
+    </div>
+    <div style="margin-bottom: 10px; padding: 10px; background-color: #f0f4f8; border-left: 4px solid #4a90e2; border-radius: 4px;">
+      <p style="margin: 0; font-size: 14px;"><strong>#6:</strong> Now finally I can watch all the episodes 😅😊😊</p>
+      <p style="margin: 5px 0 0; font-size: 12px; color: #555;">👍 35개</p>
+    </div>
+    <div style="margin-bottom: 10px; padding: 10px; background-color: #f0f4f8; border-left: 4px solid #4a90e2; border-radius: 4px;">
+      <p style="margin: 0; font-size: 14px;"><strong>#7:</strong> Welcome back Palki Sharma. We missed your reporting.👍🇮🇳</p>
+      <p style="margin: 5px 0 0; font-size: 12px; color: #555;">👍 33개</p>
+    </div>
+    <div style="margin-bottom: 10px; padding: 10px; background-color: #f0f4f8; border-left: 4px solid #4a90e2; border-radius: 4px;">
+      <p style="margin: 0; font-size: 14px;"><strong>#8:</strong> Been a Fan of LG especially LG Smartphone</p>
+      <p style="margin: 5px 0 0; font-size: 12px; color: #555;">👍 25개</p>
+    </div>
+    <div style="margin-bottom: 10px; padding: 10px; background-color: #f0f4f8; border-left: 4px solid #4a90e2; border-radius: 4px;">
+      <p style="margin: 0; font-size: 14px;"><strong>#9:</strong> Applied 1 lot (13 shares) ,and got allotment in LG IPO ,holding for long term and add few more on dips</p>
+      <p style="margin: 5px 0 0; font-size: 12px; color: #555;">👍 23개</p>
+    </div>
+    <div style="margin-bottom: 10px; padding: 10px; background-color: #f0f4f8; border-left: 4px solid #4a90e2; border-radius: 4px;">
+      <p style="margin: 0; font-size: 14px;"><strong>#10:</strong> Hope more and more Indian brands go global and dominate the world</p>
+      <p style="margin: 5px 0 0; font-size: 12px; color: #555;">👍 19개</p>
+    </div></div>
+          </div>
+          <div class="section">
+            <h2 class="section-title">💡 AI 생성 심층 인사이트</h2>
+            <div class="insights-section"><p style="margin: 0 0 10px 0; line-height: 1.6;">1. **시청자 반응 요약**: 시청자들의 반응은 긍정적이 43.2%로 가장 높았고, 부정적 반응은 28.4%로 그 뒤를 따랐습니다. 긍정적인 반응은 주로 'Palki'와 관련된 언급에서 나타났으며, 그녀의 복귀를 환영하는 분위기가 강했습니다. 반면, 부정적인 반응은 'India'와 'Investment' 관련 주제에서 더 많이 보였는데, 이는 아마도 인도의 경제 상황이나 투자 환경에 대한 우려 때문일 수 있습니다. 중립적인 반응은 주로 주식 시장과 경제 전반에 대한 논의에서 나왔습니다.</p><p style="margin: 0 0 10px 0; line-height: 1.6;">2. **주요 관심사 및 이슈**: 시청자들이 가장 많이 언급한 주제는 'LG', 'India', 'Palki'였습니다. 'LG'에 대한 관심은 주로 LG의 IPO 데뷔와 관련된 긍정적인 기대감에서 비롯된 것으로 보입니다. 'India'와 관련해서는 경제 성장과 IPO 시장의 확장에 대한 논의가 많았으며, 이에 대한 만족도는 양면적입니다. 'Palki'에 대한 언급은 그녀의 복귀에 대한 기쁨이 주를 이루었으며, 이는 시청자들이 그녀의 존재를 매우 긍정적으로 평가하고 있음을 보여줍니다. 불만족 요소로는 금액 표시 방식에 대한 불편함이 언급되었습니다.</p><p style="margin: 0 0 10px 0; line-height: 1.6;">3. **콘텐츠 개선 제안**: 영상 제작자는 다음 콘텐츠에서 금액을 루피와 달러로 모두 표시하는 방식을 채택하는 것이 좋습니다. 이는 시청자들이 다양한 경제 상황을 보다 쉽게 이해할 수 있도록 도와줄 것입니다. 또한, Palki Sharma의 개인적인 매력을 더 강조하는 콘텐츠를 기획하면 시청자들의 긍정적인 반응을 더욱 증폭시킬 수 있습니다. 예를 들어, 그녀의 복귀 에피소드나 특별 인터뷰 등을 포함하는 것도 좋은 아이디어입니다.</p><p style="margin: 0 0 10px 0; line-height: 1.6;">4. **마케팅/소통 활용 방안**: 이 분석 결과를 바탕으로, LG와의 협업을 통한 마케팅 캠페인을 고려할 수 있습니다. LG의 IPO 성공에 대한 후속 콘텐츠를 제작하거나, LG의 브랜드와 연계된 이벤트를 통해 시청자와의 소통을 강화할 수 있습니다. 또한, Palki Sharma의 인기를 활용하여 소셜 미디어 캠페인을 진행하면, 그녀의 팬들과 더 깊이 소통할 수 있습니다. 예를 들어, 그녀의 복귀를 축하하는 이벤트나 Q&A 세션을 통해 시청자들과 직접 소통하는 기회를 마련하는 것도 효과적일 것입니다.</p></div>
+          </div>
+          
+        </div>
+        <div class="footer">
+          <p>이 분석 리포트는 고객경험DX팀의 AI 유튜브 탐정이 자동으로 생성했습니다. 🤖✨</p>
+          <p>Best Regards,<br>Tae-Sung Lee<br>Mobile: +82-10-2218-7485<br>CX Innovation DX Team, DX Center, CSO<br>LG Electronics Inc.</p>
+          <p style="color: #FF0000; font-weight: bold;">⚠️ 그래프가 표시되지 않는 경우, 이메일 클라이언트에서 "이미지 표시" 또는 "외부 콘텐츠 표시" 옵션을 활성화해 주세요. (Gmail: 이메일 상단의 "이미지 표시" 클릭)</p>
+        </div>
+      </div>
+    </body>
+    </html>
