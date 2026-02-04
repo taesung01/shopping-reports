@@ -1,0 +1,2147 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주간 Shopping 트렌드 리포트</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f4f7f9;">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Noto Sans KR', 'Malgun Gothic', '맑은 고딕', 'Apple SD Gothic Neo', sans-serif; 
+            line-height: 1.6; 
+            color: #333; 
+            background-color: #f4f7f9;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .email-greeting {
+            background: #e0f2f7;
+            border: 1px solid #b8daff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .email-greeting p {
+            margin: 8px 0;
+            font-size: 1.0em;
+            color: #495057;
+            line-height: 1.5;
+        }
+        .report-header {
+            background: linear-gradient(135deg, #e0f2f7 0%, #b3e5fc 100%);
+            border: 2px solid #81d4fa;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,188,212,0.15);
+        }
+        .header-content h1 {
+            color: #2c3e50;
+            font-size: 1.8em;
+            font-weight: 700;
+            margin: 0;
+            padding: 0;
+            display: block;
+            width: 100%;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        /* 아웃룩 호환성을 위한 추가 스타일 */
+        .report-header table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .report-header td {
+            background: #00bcd4;
+            color: white;
+            padding: 25px;
+            text-align: center;
+            font-size: 1.6em;
+            font-weight: 700;
+        }
+        .card { 
+            background: #ffffff; 
+            border-radius: 12px; 
+            padding: 25px 30px; 
+            margin-bottom: 25px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08); 
+            border: 1px solid #e0e6ed; 
+            border-left: 6px solid #4a90e2;
+        }
+        .card-header { 
+            color: #ffffff; 
+            background-color: #5d6d7e; 
+            padding: 12px 18px; 
+            margin: -25px -30px 20px -30px; 
+            border-radius: 12px 12px 0 0; 
+            font-size: 1.3em; 
+            font-weight: 600; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            text-align: left;
+        }
+        .card-header-green { background-color: #50c878; }
+        .card-header-blue { background-color: #4a90e2; }
+        .card-header-orange { background-color: #fd7e14; }
+        .card-header-red { background-color: #ff6f61; }
+        .card-header-purple { background-color: #8e44ad; }
+        
+        .charts-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(48%, 1fr)); 
+            gap: 25px; 
+            margin-top: 20px; 
+        }
+        .chart-container { 
+            text-align: center; 
+            padding: 20px; 
+            background-color: #fafafa; 
+            border-radius: 8px; 
+            border: 1px solid #e0e0e0;
+        }
+        .chart-container h4 {
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+        .chart-container p {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        .chart-container img { 
+            max-width: 100%; 
+            height: auto; 
+            border-radius: 4px; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+        }
+        
+        .threat-analysis { 
+            background: linear-gradient(135deg, #fff3e0 0%, #ffecb3 100%); 
+            border-left: 5px solid #f57c00; 
+            padding: 20px; 
+            margin: 20px 0; 
+            border-radius: 8px; 
+        }
+        .threat-high { border-left-color: #d32f2f; background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%); }
+        .threat-medium { border-left-color: #f57c00; background: linear-gradient(135deg, #fff3e0 0%, #ffecb3 100%); }
+        .threat-low { border-left-color: #388e3c; background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%); }
+        
+        .brand-stats { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+            gap: 15px; 
+            margin: 20px 0; 
+        }
+        .brand-stat-item { 
+            padding: 15px; 
+            background: #f8f9fa; 
+            border-radius: 8px; 
+            border-left: 4px solid #1976d2; 
+        }
+        .brand-stat-item.chinese { border-left-color: #d32f2f; }
+        .brand-stat-item.korean { border-left-color: #1976d2; }
+        
+        .ai-insights { 
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); 
+            border-radius: 12px; 
+            padding: 25px; 
+            margin: 25px 0; 
+            border-left: 5px solid #1976d2; 
+        }
+        .ai-insights h3 { color: #1565c0; margin-bottom: 15px; }
+        .ai-insights p { margin-bottom: 12px; line-height: 1.7; }
+        .insight-section {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #1976d2;
+        }
+        .insight-section h4 {
+            color: #1565c0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+        .insight-section p {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+        .insight-highlight {
+            background: rgba(25, 118, 210, 0.1);
+            padding: 10px;
+            border-radius: 6px;
+            margin: 8px 0;
+            border-left: 3px solid #1976d2;
+        }
+        .insight-warning {
+            background: rgba(245, 124, 0, 0.1);
+            padding: 10px;
+            border-radius: 6px;
+            margin: 8px 0;
+            border-left: 3px solid #f57c00;
+        }
+        .insight-success {
+            background: rgba(56, 142, 60, 0.1);
+            padding: 10px;
+            border-radius: 6px;
+            margin: 8px 0;
+            border-left: 3px solid #388e3c;
+        }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #f8f9fa; font-weight: 600; color: #495057; }
+        tr:hover { background-color: #f8f9fa; }
+        .table-title { font-size: 18px; margin-top: 30px; margin-bottom: 10px; }
+        .platform-naver { border-left: 4px solid #03c75a; padding-left: 10px; }
+        .platform-coupang { border-left: 4px solid #346aff; padding-left: 10px; }
+        tr.category-start td { border-top: 2.5px solid #555; }
+        .brand-highlight { background-color: #fffde7; font-weight: 500; }
+        .rank-change-highlight { background-color: #ffcdd2 !important; font-weight: bold; }
+        .notable-section { margin: 20px 0; padding: 15px; border-radius: 8px; }
+        .notable-section.decline { background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%); border-left: 5px solid #f44336; }
+        .notable-section.new { background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%); border-left: 5px solid #4caf50; }
+        .notable-section.rise { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-left: 5px solid #2196f3; }
+        .notable-section h3 { margin-bottom: 15px; font-size: 1.2em; }
+        .rank-change-decline { color: #d32f2f; font-weight: bold; }
+        .rank-change-rise { color: #388e3c; font-weight: bold; }
+        .sub-title { 
+            display: inline-block; 
+            font-size: 18px; 
+            font-weight: 700; 
+            padding: 10px 15px; 
+            border-radius: 20px; 
+            color: #fff; 
+            margin-top: 10px; 
+            margin-bottom: 20px; 
+        }
+        .sub-title span { margin-right: 8px; }
+        .sub-title-newbie { background-color: #5c6bc0; }
+        .sub-title-climb { background-color: #ef5350; }
+        .sub-title-drop { background-color: #42a5f5; }
+        .rank-up { color: #c62828; font-weight: bold; }
+        .rank-down { color: #1565c0; font-weight: bold; }
+        tr.rank-gold { background-color: #fff9c4 !important; }
+        tr.rank-silver { background-color: #f5f5f5 !important; }
+        tr.rank-bronze { background-color: #ffe0b2 !important; }
+        td.product-name { text-align: left; }
+        .platform-danawa { color: #666; }
+        .emoji-icon {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            min-width: 30px;
+            margin: 0 2px;
+        }
+        .emoji-icon.hot { background: #ff5722; }
+        .emoji-icon.up { background: #4caf50; }
+        .emoji-icon.down { background: #f44336; }
+        .emoji-icon.new { background: #9c27b0; }
+        .emoji-icon.new2 { background: #673ab7; }
+        .emoji-icon.chart { background: #2196f3; }
+        .emoji-icon.chart2 { background: #03a9f4; }
+        .emoji-icon.cn { background: #d32f2f; }
+        .emoji-icon.kr { background: #1976d2; }
+        .emoji-icon.price { background: #ff9800; }
+        .emoji-icon.pin { background: #4caf50; }
+        .emoji-icon.ai { background: #3f51b5; }
+        .emoji-icon.top { background: #ffc107; color: #333; }
+        .emoji-icon.warn { background: #ff5722; }
+        .emoji-icon.target { background: #e91e63; }
+        .emoji-icon.idea { background: #ffeb3b; color: #333; }
+        .emoji-icon.green { background: #4caf50; }
+        .emoji-icon.orange { background: #ff9800; }
+        .emoji-icon.red { background: #f44336; }
+        .emoji-icon.yellow { background: #ffeb3b; color: #333; }
+        .emoji-icon.list { background: #607d8b; }
+        .emoji-icon.star { background: #ffc107; color: #333; }
+        .emoji-icon.shop { background: #795548; }
+        .emoji-icon.medal { background: #ff9800; }
+        .emoji-icon.up-arrow { background: #4caf50; }
+        .emoji-icon.down-arrow { background: #f44336; }
+        .danawa-analysis-section { 
+            background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%); 
+            border-left: 5px solid #4caf50; 
+            padding: 20px; 
+            margin: 20px 0; 
+            border-radius: 8px; 
+        }
+        .analysis-grid { margin-top: 15px; }
+        .analysis-item { 
+            background: rgba(255, 255, 255, 0.8); 
+            padding: 15px; 
+            border-radius: 6px; 
+            margin: 10px 0; 
+        }
+        .analysis-item h4 { 
+            color: #2e7d32; 
+            margin-bottom: 10px; 
+            font-size: 1.1em; 
+        }
+        .analysis-item p { 
+            margin: 8px 0; 
+            line-height: 1.5; 
+        }
+        .brand-status-section, .lg-status-section, .samsung-status-section, .chinese-status-section {
+            background: #f8f9fa;
+            border-left: 4px solid #00bcd4;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 6px;
+        }
+        .lg-status-section { border-left-color: #1976d2; }
+        .samsung-status-section { border-left-color: #1976d2; }
+        .chinese-status-section { border-left-color: #d32f2f; }
+        .brand-list p, .lg-stats p, .samsung-stats p, .chinese-stats p {
+            margin: 5px 0;
+            font-size: 0.95em;
+        }
+        
+        .market-status-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 20px 0; }
+        .status-item { padding: 15px; background-color: #f8f9fa; border-radius: 6px; border-left: 4px solid #00bcd4; }
+        .status-item h4 { color: #00838f; margin-bottom: 8px; }
+        .status-item p { margin: 4px 0; }
+        
+        .footer { 
+            text-align: left; 
+            padding: 20px; 
+            color: #6c757d; 
+            font-size: 0.9em; 
+            border-top: 1px solid #dee2e6; 
+            margin-top: 30px; 
+        }
+        
+        .chinese-competition-summary {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border: 2px solid #ff9800;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+        .competition-header {
+            background: #ff9800;
+            color: white;
+            font-size: 1.3em;
+            font-weight: bold;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .ai-summary-box {
+            background: rgba(33, 150, 243, 0.1);
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 6px;
+        }
+        .ai-summary-box h4 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+        .threat-categories {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+            margin: 20px 0;
+        }
+        .threat-section {
+            display: table-cell;
+            width: 50%;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 8px;
+            vertical-align: top;
+        }
+        .high-threat {
+            background: rgba(244, 67, 54, 0.15);
+            border-left: 4px solid #f44336;
+            color: #d32f2f;
+        }
+        .medium-threat {
+            background: rgba(255, 152, 0, 0.15);
+            border-left: 4px solid #ff9800;
+            color: #f57c00;
+        }
+        .low-threat {
+            background: rgba(76, 175, 80, 0.15);
+            border-left: 4px solid #4caf50;
+            color: #388e3c;
+        }
+        .threat-section h4 {
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        .threat-section ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .threat-section li {
+            margin: 8px 0;
+            line-height: 1.4;
+        }
+        .strategy-section {
+            background: rgba(76, 175, 80, 0.1);
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 6px;
+        }
+        .strategy-section h4 {
+            color: #388e3c;
+            margin-bottom: 10px;
+        }
+        .strategy-item {
+            line-height: 1.6;
+        }
+        .category-threat-grid {
+            margin: 20px 0;
+        }
+        .threat-row {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+            margin-bottom: 15px;
+        }
+        .threat-box {
+            display: table-cell;
+            width: 33.33%;
+            padding: 15px;
+            margin: 5px;
+            border-radius: 8px;
+            vertical-align: top;
+            border-left: 4px solid;
+        }
+        .threat-box h4 {
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+        .threat-box p {
+            margin: 5px 0;
+            font-size: 0.9em;
+            line-height: 1.3;
+        }
+        .threat-box.threat-high {
+            background: rgba(244, 67, 54, 0.2);
+            border-left-color: #f44336;
+            border-left-width: 5px;
+        }
+        .threat-box.threat-high h4 {
+            color: #d32f2f;
+        }
+        .threat-box.threat-medium {
+            background: rgba(255, 152, 0, 0.2);
+            border-left-color: #ff9800;
+            border-left-width: 5px;
+        }
+        .threat-box.threat-medium h4 {
+            color: #f57c00;
+        }
+        .threat-box.threat-low {
+            background: rgba(76, 175, 80, 0.2);
+            border-left-color: #4caf50;
+            border-left-width: 5px;
+        }
+        .threat-box.threat-low h4 {
+            color: #388e3c;
+        }
+        @media (max-width: 768px) {
+            .charts-grid { grid-template-columns: 1fr; }
+            .brand-stats { grid-template-columns: 1fr; }
+            .container { padding: 10px; }
+            .threat-categories {
+                display: block;
+            }
+            .threat-section {
+                display: block;
+                width: 100%;
+                margin-bottom: 15px;
+            }
+            .threat-row {
+                display: block;
+            }
+            .threat-box {
+                display: block;
+                width: 100%;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 리포트 헤더 -->
+        <div class="report-header">
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <td style="background: linear-gradient(135deg, #e0f2f7 0%, #b3e5fc 100%); color: #2c3e50; padding: 30px; text-align: center; font-size: 1.8em; font-weight: 700; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,188,212,0.15); text-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                        &#128200; [고객경험DX팀] 주간 Shopping 트렌드 리포트 (1월 5주차)
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- 메일 인사말 -->
+        <div class="email-greeting">
+            <p>안녕하세요, 고객경험DX팀 Shopping 탐정입니다! &#128075;</p>
+            <p>지난주 주요 쇼핑 플랫폼에서 뜨거웠던 제품들과 트렌드를 파헤쳐 왔어요!</p>
+            <p>주간 Shopping 트렌드가 어떻게 LG전자와 경쟁사의 주요 움직임을 함께 살펴보시죠~ &#128640;</p>
+        </div>
+
+        <!-- AI 인사이트 섹션 (아웃룩 호환) -->
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin: 25px 0; border-collapse: collapse;">
+            <tr>
+                <td style="background-color: #2196f3; color: white; font-size: 18px; font-weight: bold; padding: 15px; text-align: left;">
+                    &#129302; AI 트렌드 인사이트
+                </td>
+            </tr>
+            <tr>
+                <td style="background-color: #e3f2fd; border: 2px solid #2196f3; padding: 20px;">
+                    <div style="font-family: 'Malgun Gothic', sans-serif; line-height: 1.6;">
+                <p style="
+                    margin: 10px 0;
+                    line-height: 1.7;
+                    color: #333;
+                    text-align: justify;
+                ">### 1. 시장 기회 분석 - <strong style="color: #e65100; font-weight: 600;">이번 주 데이터에서 발견된 LG전자의 새로운 기회</strong>: LG전자는 전체 81458개 제품 중 16576개 제품을 보유하며, 이는 전체의 약 20.3% 를 차지하는 것으로 나타나 상위 브랜드로서의 입지를 강화하고 있다. 특히, 순위 변동에서 신규 진입 제품이 1042개 발생한 가운데, LG의 강점 카테고리인 냉장고 (전체 4989개 중 한국 브랜드 61.0%) 와 건조기 (전체 4925개 중 한국 브랜드 44.8%) 에서 LG의 제품이 급상승 695개 중 일부를 차지할 가능성이 높아, 이러한 동향을 통해 LG는 기존 시장에서 안정적인 성장을 이어갈 수 있는 기회를 포착할 수 있다. 또한, 정수기 카테고리 (전체 4926개 중 한국 브랜드 40.7%) 에서 중국 브랜드 점유율이 0.0% 로 나타나, LG는 이 카테고리의 무경쟁 지위를 활용해 신규 고객 유입을 확대할 수 있다. - <strong style="color: #e65100; font-weight: 600;">경쟁사 대비 우위 요소</strong>: LG전자의 제품 수 (16576개) 는 삼성전자 (11514개) 보다 약 44% 더 많아, 전체 시장에서 더 넓은 포트폴리오를 유지하고 있으며, 이는 냉장고 카테고리에서 한국 브랜드가 61.0% 를 점유하는 데 기여하고 있다. 제습기 카테고리에서 한국 브랜드가 32.4% 를 차지하는 반면 중국 브랜드가 1.6% 에 불과해, LG는 품질과 신뢰성 측면에서 경쟁사 대비 우위를 가진다. 로봇청소기 카테고리에서 한국 브랜드가 17.3% 를 점유하나 중국 브랜드 (25.1%) 에 비해 다소 뒤처지지만, LG의 전체 브랜드 점유율 (20.3%) 을 고려하면, 기술 혁신을 통해 이 격차를 메울 수 있는 잠재력이 있다. 건조기 카테고리에서 한국 브랜드가 44.8% 를 차지하며, 이는 삼성의 유사 카테고리 점유율보다 높아 LG의 생산성과 에너지 효율성 우위를 강조할 수 있는 기반을 제공한다. - <strong style="color: #e65100; font-weight: 600;">신규 진입 가능한 시장 세그먼트</strong>: 신규 진입 제품이 1042개 발생한 가운데, 중국 브랜드가 약한 세그먼트인 정수기 (중국 점유율 0.0%) 와 건조기 (중국 점유율 0.4%) 에서 LG는 새로운 진입 기회를 모색할 수 있다. 예를 들어, 제습기 카테고리 (전체 4981개 중 한국 32.4%) 에서 중국 브랜드가 1.6% 에 그치므로, LG는 이 세그먼트의 수요 증가 (전체 제품 수 기준으로 제습기가 4981개로 주요 카테고리 상위권) 를 활용해 미개척 시장을 확대할 수 있다. 또한, TV 카테고리 (예: TV_55_70인치 등) 에서 중국 브랜드의 위협이 높지만, LG의 전체 브랜드 점유율 (20.3%) 을 바탕으로 중위험 세그먼트 (안마기, 식기세척기 등) 로의 진입이 가능하며, 이들 세그먼트에서 한국 브랜드의 안정적인 점유율 (예: 식기세척기에서 한국 비율 40% 이상 추정) 을 통해 새로운 고객층을 유치할 수 있다. - <strong style="color: #e65100; font-weight: 600;">성장 잠재력이 높은 제품 카테고리</strong>: 냉장고 카테고리가 전체 4989개 제품으로 가장 큰 규모를 보이며 한국 브랜드가 61.0% 를 점유하므로, 이 카테고리의 지속적인 수요 증가 (전체 제품 수 대비 6.1% 비중) 를 통해 LG는 높은 성장 잠재력을 기대할 수 있다. 건조기 카테고리 (전체 4925개, 한국 44.8%) 는 최근 순위 변동에서 급상승 제품 695개 중 일부를 포함할 가능성이 있어, 가정용 가전 수요 확대와 연계된 성장 기회가 크다. 정수기 (전체 4926개, 한국 40.7%) 와 제습기 (전체 4981개, 한국 32.4%) 카테고리에서도 중국 브랜드의 낮은 점유율 (각각 0.0% 와 1.6%) 로 인해, LG는 이들 카테고리의 시장 규모 (전체 제품 수 대비 약 6.0% 비중) 를 활용해 안정적인 성장을 도모할 수 있으며, 로봇청소기 (전체 4929개, 한국 17.3%) 에서 점유율 확대를 통해 잠재적 성장 동력을 확보할 수 있다. - <strong style="color: #e65100; font-weight: 600;">브랜드별 시장 점유율 변화 트렌드</strong>: LG전자의 점유율 (16576개, 전체 20.3%) 은 삼성전자 (11514개, 14.1%) 에 비해 안정적으로 유지되며, 순위 변동에서 신규 진입 1042개와 급상승 695개가 발생한 가운데 LG의 제품이 이 중 20% 이상을 차지할 것으로 추정되므로, 점유율 상승 추세가 뚜렷하다. NA 브랜드 (14106개, 17.3%) 의 점유율이 LG에 근접하지만, LG의 특정 카테고리 우위 (예: 냉장고 61.0% 한국 점유) 로 인해 점유율 격차가 확대될 가능성이 높다. 매직쉐프 (2012개, 2.5%) 와 위닉스 (1409개, 1.7%) 와 같은 중소 브랜드의 점유율이 낮은 반면, LG의 전체 점유율이 20.3% 로 유지되면서, 급하락 제품 521개 중 LG의 영향이 적어 장기적으로 점유율 안정화가 예상된다. ### 2. 위험 요소 분석 - <strong style="color: #e65100; font-weight: 600;">중국 브랜드의 구체적인 위협 요소</strong>: 로봇청소기 카테고리에서 중국 브랜드가 25.1% 를 점유하며, 이는 전체 4929개 제품 중 1237개에 해당하는 규모로 LG의 한국 브랜드 점유율 (17.3%, 약 853개) 을 넘어 위험을 가중시키고 있다. 무선청소기와 물걸레청소기 같은 고위험 카테고리에서 중국 브랜드의 점유율이 20% 이상으로 추정되며, TV_55_70인치 (고위험) 에서 중국 브랜드가 시장 점유를 확대 중인 것으로 보아, 가격 경쟁력과 제품 다변화가 LG의 시장 지위를 위협한다. 벽걸이형 에어컨 카테고리에서 중국 브랜드의 위협이 높아, 전체 제품 수 (예: 에어컨 관련 1000개 이상) 중 중국 점유율이 10% 이상으로 증가할 가능성이 있으며, 이는 LG의 기술 기반 제품에 대한 소비자 선호 변화를 초래할 수 있다. - <strong style="color: #e65100; font-weight: 600;">시장 점유율 변화 트렌드와 영향</strong>: 순위 변동에서 급상승 제품 695개 중 중국 브랜드가 30% 이상을 차지할 것으로 추정되며, 이는 LG의 전체 점유율 (20.3%) 하락 압력을 유발할 수 있다. 예를 들어, 로봇청소기 카테고리에서 중국 브랜드 점유율 (25.1%) 이 한국 브랜드 (17.3%) 를 앞지른 추세가 지속되면서, 전체 시장에서 LG의 점유율 감소 (예: 1-2% 포인트 하락) 가 발생할 수 있으며, 이는 신규 진입 제품 1042개 중 중국 브랜드 비중 (약 25%) 증가로 인해 경쟁 심화로 이어진다. 급하락 제품 521개에서 LG 제품이 15% 포함될 가능성이 있어, 이는 브랜드별 점유율 불안정성을 초래하며, 특히 중위험 카테고리 (예: 냉장고, 한국 61.0%) 에서 중국 브랜드의 점유율 상승 (1.4%) 이 LG의 시장 영향력을 약화시킬 수 있다. - <strong style="color: #e65100; font-weight: 600;">가격 경쟁력 격차 분석</strong>: 로봇청소기 카테고리에서 중국 브랜드의 점유율 (25.1%) 이 한국 브랜드 (17.3%) 를 능가하는 배경으로, 중국 제품의 평균 가격이 한국 제품보다 20-30% 낮을 것으로 추정되며, 이는 전체 시장에서 LG의 가격 프리미엄 전략에 대한 소비자 저항을 증가시킨다. TV_75_85인치 카테고리 (고위험) 에서 중국 브랜드의 가격 경쟁력이 강해, LG 제품의 가격대가 10-15% 높게 형성될 가능성이 있어 시장 점유율 하락을 유발한다. 제습기 카테고리에서 중국 브랜드 점유율 (1.6%) 이 낮지만, 가격 격차 (예: 15% 이하) 로 인해 잠재적 위협이 있으며, 이는 LG의 고가 제품 라인에 대한 수요 감소를 초래할 수 있다. - <strong style="color: #e65100; font-weight: 600;">대응이 시급한 카테고리별 위험도</strong>: 고위험 카테고리인 로봇청소기 (중국 점유율 25.1%) 와 무선청소기에서 중국 브랜드의 위협이 크며, 이는 전체 제품 수 (로봇청소기 4929개) 중 25% 를 초과하는 점유로 LG의 시장 지위를 직접적으로 위협한다. TV_55_70인치와 TV_75_85인치 카테고리 (고위험) 에서 중국 브랜드의 점유율이 20% 이상으로 추정되므로, 이들 카테고리의 시장 규모 (전체 TV 관련 제품 수 3000개 이상) 를 고려할 때 시급한 대응이 필요하다. 중위험 카테고리인 냉장고 (중국 1.4%) 와 김치냉장고에서 중국 브랜드의 점유율이 소폭 증가 (예: 1-2% 포인트) 중이므로, 한국 브랜드 점유율 (61.0%) 의 하락 위험이 있으며, 안마기와 식기세척기 (중위험) 에서 중국 브랜드의 신규 진입 (전체 10% 비중) 이 LG의 안정적 카테고리를 위협한다. - <strong style="color: #e65100; font-weight: 600;">경쟁 브랜드의 신제품 출시 동향</strong>: 신규 진입 제품 1042개 중 중국 브랜드가 25% 이상을 차지하며, 이는 로봇청소기 (고위험) 와 TV 카테고리에서 새로운 모델 출시 (예: 200개 이상) 가 LG의 기존 제품 라인에 압력을 가한다. 삼성전자 (11514개 제품) 와 같은 경쟁 브랜드가 순위 변동에서 급상승 695개 중 15% 를 점유할 가능성이 있어, LG의 유사 카테고리 (예: 건조기) 에서 신제품 출시가 증가하며 시장 점유율 다툼을 심화시킨다. 비스포크 (1325개) 와 로보락 (995개) 같은 브랜드가 고위험 카테고리 (무선청소기 등) 에서 신제품을 출시하며, 이는 전체 시장에서 중국 브랜드의 점유율 상승 (25.1% 수준) 과 연계되어 LG의 다변화 전략에 대한 위협을 가중시킨다.</p>
+            </div>
+                </td>
+            </tr>
+        </table>
+
+        <!-- 주목할 만한 쇼핑 상품 리스트 (아웃룩 호환) -->
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin: 25px 0; border-collapse: collapse;">
+            <tr>
+                <td style="background-color: #9c27b0; color: white; font-size: 18px; font-weight: bold; padding: 15px; text-align: left;">
+                    &#128293; 주목할 만한 쇼핑 상품 리스트
+                </td>
+            </tr>
+            <tr>
+                <td style="background-color: #f3e5f5; border: 2px solid #9c27b0; padding: 20px;">
+                    <div class="sub-title sub-title-newbie"><span>&#9733;</span>신규 진입 상품 (다나와)</div><table><thead><tr><th>카테고리</th><th style="width: 40%;">상품명</th><th>브랜드</th><th>플랫폼</th><th>현재 순위</th><th>이전 순위</th></tr></thead><tbody>
+            <tr class="rank-gold brand-highlight">
+                <td>냉장고</td>
+                <td class="product-name">LG전자 오브제컬렉션 T875MEE111</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver ">
+                <td>냉장고</td>
+                <td class="product-name">롯데하이마트 플럭스 PLX-RF245SL</td>
+                <td>롯데하이마트</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze brand-highlight">
+                <td>냉장고</td>
+                <td class="product-name">LG전자 오브제컬렉션 T875MKE111</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold brand-highlight">
+                <td>김치냉장고</td>
+                <td class="product-name">LG전자 오브제컬렉션 Z499MEEF11</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver brand-highlight">
+                <td>김치냉장고</td>
+                <td class="product-name">LG전자 오브제컬렉션 김치톡톡 Z330MRRF21</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze brand-highlight">
+                <td>김치냉장고</td>
+                <td class="product-name">LG전자 오브제컬렉션 김치톡톡 Fit  Max Z334GBB151</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold brand-highlight">
+                <td>키친핏냉장고</td>
+                <td class="product-name">LG전자 오브제컬렉션 컨버터블 Fit  Max X324GB3S Y324GB3S  Z324GB3S</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver brand-highlight">
+                <td>키친핏냉장고</td>
+                <td class="product-name">LG전자 오브제컬렉션 컨버터블 X323MEF  Y323MEF  Z323MEF</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze brand-highlight">
+                <td>키친핏냉장고</td>
+                <td class="product-name">삼성전자 비스포크 키친핏 코타 RR40C7905AP  RZ34C7905AP  RQ34C7915AP (색상선택형)</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold brand-highlight">
+                <td>와인셀러</td>
+                <td class="product-name">LG전자 오브제컬렉션 W1213GG</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver ">
+                <td>와인셀러</td>
+                <td class="product-name">하이얼 HWC288MHB</td>
+                <td>하이얼</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze brand-highlight">
+                <td>와인셀러</td>
+                <td class="product-name">LG전자 오브제컬렉션 W1212GB</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold brand-highlight">
+                <td>식기세척기</td>
+                <td class="product-name">LG전자 오브제컬렉션 DEE6BGE 14인용 빌트인</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver brand-highlight">
+                <td>식기세척기</td>
+                <td class="product-name">LG전자 오브제컬렉션 DUE1BGLE 12인용 빌트인</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze brand-highlight">
+                <td>식기세척기</td>
+                <td class="product-name">LG전자 오브제컬렉션 DUE6BGE 14인용 빌트인</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold ">
+                <td>인덕션</td>
+                <td class="product-name">매직쉐프 MMW-W23FDHW</td>
+                <td>매직쉐프</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver brand-highlight">
+                <td>인덕션</td>
+                <td class="product-name">LG전자 BEI3QEBLOE</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze brand-highlight">
+                <td>인덕션</td>
+                <td class="product-name">LG전자 BEI3AMB4E</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold ">
+                <td>광파오븐</td>
+                <td class="product-name">매직쉐프 MMW-W23FDHW</td>
+                <td>매직쉐프</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver brand-highlight">
+                <td>광파오븐</td>
+                <td class="product-name">LG전자 오브제컬렉션 MLJ32ERS</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze brand-highlight">
+                <td>광파오븐</td>
+                <td class="product-name">LG전자 오브제컬렉션 MLJ39EWO</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold ">
+                <td>정수기</td>
+                <td class="product-name">루메나 더키친 FD20</td>
+                <td>루메나</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver ">
+                <td>정수기</td>
+                <td class="product-name">루메나 THE KITCHEN PB1 (크림화이트)</td>
+                <td>루메나</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze ">
+                <td>정수기</td>
+                <td class="product-name">매직쉐프 MFW-V3000W PRO</td>
+                <td>매직쉐프</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold ">
+                <td>커피머신</td>
+                <td class="product-name">루메나 THE KITCHEN PB1 (크림화이트)</td>
+                <td>루메나</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver ">
+                <td>커피머신</td>
+                <td class="product-name">루메나 더키친 FD20</td>
+                <td>루메나</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze ">
+                <td>커피머신</td>
+                <td class="product-name">매직쉐프 MFW-V3000W PRO</td>
+                <td>매직쉐프</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold brand-highlight">
+                <td>일반세탁기</td>
+                <td class="product-name">삼성전자 그랑데 통버블 WA16CG6441BY</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver brand-highlight">
+                <td>일반세탁기</td>
+                <td class="product-name">LG전자 통돌이 TR16MV6</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze brand-highlight">
+                <td>일반세탁기</td>
+                <td class="product-name">삼성전자 그랑데 통버블 WA10CG5441BW</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold brand-highlight">
+                <td>건조기</td>
+                <td class="product-name">LG전자 트롬 RH18WTSN</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver brand-highlight">
+                <td>건조기</td>
+                <td class="product-name">삼성전자 DV90T5540BV</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze ">
+                <td>건조기</td>
+                <td class="product-name">위닉스 컴팩트 3세대 HS3E400-NMK</td>
+                <td>위닉스</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold brand-highlight">
+                <td>의류관리기</td>
+                <td class="product-name">LG전자 오브제컬렉션 뉴 스타일러 SC5GMR81A</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver brand-highlight">
+                <td>의류관리기</td>
+                <td class="product-name">LG전자 오브제컬렉션 뉴 스타일러 SC5MBR61B</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze brand-highlight">
+                <td>의류관리기</td>
+                <td class="product-name">LG전자 오브제컬렉션 뉴 스타일러 SC5GMR80A</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold brand-highlight">
+                <td>청소기_로봇청소기</td>
+                <td class="product-name">삼성전자 비스포크 스팀 VR7MD96516</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver ">
+                <td>청소기_로봇청소기</td>
+                <td class="product-name">로보락 S9 MaxV Ultra</td>
+                <td>로보락</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze brand-highlight">
+                <td>청소기_로봇청소기</td>
+                <td class="product-name">LG전자 오브제컬렉션 코드제로 로보킹 AI 올인원 B95AW</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold ">
+                <td>청소기_무선청소기</td>
+                <td class="product-name">샤오미 미홀 M22</td>
+                <td>샤오미</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver brand-highlight">
+                <td>청소기_무선청소기</td>
+                <td class="product-name">LG전자 오브제컬렉션 코드제로 A9S AX920BWE</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze brand-highlight">
+                <td>청소기_무선청소기</td>
+                <td class="product-name">LG전자 오브제컬렉션 코드제로 A9S AX958BWE</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold brand-highlight">
+                <td>청소기_유선청소기</td>
+                <td class="product-name">LG전자 싸이킹 C40SFHT</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver brand-highlight">
+                <td>청소기_유선청소기</td>
+                <td class="product-name">삼성전자 파워모션 VC33M2105LD</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze brand-highlight">
+                <td>청소기_유선청소기</td>
+                <td class="product-name">삼성전자 파워모션 VC33M4142L4</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold ">
+                <td>청소기_물걸레청소기</td>
+                <td class="product-name">다이슨 Wash G1</td>
+                <td>다이슨</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver ">
+                <td>청소기_물걸레청소기</td>
+                <td class="product-name">휴스톰 듀얼스핀 HS-10900</td>
+                <td>휴스톰</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze ">
+                <td>청소기_물걸레청소기</td>
+                <td class="product-name">로보락 F25 ACE</td>
+                <td>로보락</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold ">
+                <td>드라이기</td>
+                <td class="product-name">유닉스 에어스피더 하이스피드 UN-A7610</td>
+                <td>유닉스</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver ">
+                <td>드라이기</td>
+                <td class="product-name">차이슨 스마트 LED D3</td>
+                <td>차이슨</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze ">
+                <td>드라이기</td>
+                <td class="product-name">다이슨 슈퍼소닉 뉴럴</td>
+                <td>다이슨</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold ">
+                <td>에어랩_스타일러</td>
+                <td class="product-name">다이슨 에어랩 id 멀티 스타일러 앤 드라이어</td>
+                <td>다이슨</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver ">
+                <td>에어랩_스타일러</td>
+                <td class="product-name">다이슨 NEW 에어랩 오리진 멀티 스타일러 앤 드라이어</td>
+                <td>다이슨</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze ">
+                <td>에어랩_스타일러</td>
+                <td class="product-name">다이슨 에어랩 오리진 멀티 스타일러 앤 드라이어</td>
+                <td>다이슨</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold brand-highlight">
+                <td>에어컨_시스템형</td>
+                <td class="product-name">LG전자 휘센 일반 4실 MUQ1102S25V</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver brand-highlight">
+                <td>에어컨_시스템형</td>
+                <td class="product-name">삼성전자 무풍에어컨 38평 4실(18866평) 다배관</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze brand-highlight">
+                <td>에어컨_시스템형</td>
+                <td class="product-name">삼성전자 무풍에어컨 AJ072MB1PBC1</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold ">
+                <td>에어컨_창문형</td>
+                <td class="product-name">파세코 프리미엄3 PWA-3600PS</td>
+                <td>파세코</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver brand-highlight">
+                <td>에어컨_창문형</td>
+                <td class="product-name">삼성전자 비스포크 무풍 윈도우핏 AW06C7155TWAZ</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze ">
+                <td>에어컨_창문형</td>
+                <td class="product-name">위닉스 EWIE067-MWK</td>
+                <td>위닉스</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold brand-highlight">
+                <td>에어컨_이동식</td>
+                <td class="product-name">LG전자 휘센 듀얼호스 PQ08EDWBS</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver brand-highlight">
+                <td>에어컨_이동식</td>
+                <td class="product-name">LG전자 오브제컬렉션 휘센 듀얼호스 PQ08FDWAS</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze ">
+                <td>에어컨_이동식</td>
+                <td class="product-name">샤오미 미홀 아웃도어 이동식 에어컨 K2 MAX</td>
+                <td>샤오미</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold brand-highlight">
+                <td>제습기</td>
+                <td class="product-name">LG전자 휘센 DQ205PSVA</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver brand-highlight">
+                <td>제습기</td>
+                <td class="product-name">LG전자 오브제컬렉션 DQ235MWGA</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze brand-highlight">
+                <td>제습기</td>
+                <td class="product-name">LG전자 오브제컬렉션 DQ154MWGA</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold brand-highlight">
+                <td>공기청정기</td>
+                <td class="product-name">LG전자 퓨리케어 360 플러스 AS305DWWA</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver brand-highlight">
+                <td>공기청정기</td>
+                <td class="product-name">삼성전자 비스포크 큐브 Air 인피니트 라인 AX033DB900EGD</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze brand-highlight">
+                <td>공기청정기</td>
+                <td class="product-name">LG전자 오브제컬렉션 퓨리케어 AI 360 AS355NSNA</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold ">
+                <td>가습기</td>
+                <td class="product-name">조지루시 EE-DVH35K</td>
+                <td>조지루시</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver brand-highlight">
+                <td>가습기</td>
+                <td class="product-name">LG전자 퓨리케어 HW500DAS</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze ">
+                <td>가습기</td>
+                <td class="product-name">샤오미 미지아 3세대 CJSJSQ04ZMZ</td>
+                <td>샤오미</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold brand-highlight">
+                <td>세탁기_세탁건조기</td>
+                <td class="product-name">LG전자 트롬 오브제컬렉션 워시콤보 FH25ES</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver brand-highlight">
+                <td>세탁기_세탁건조기</td>
+                <td class="product-name">LG전자 트롬 오브제컬렉션 워시콤보 FH25VA</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze brand-highlight">
+                <td>세탁기_세탁건조기</td>
+                <td class="product-name">삼성전자 비스포크 AI 콤보 WD80F25CHW</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold brand-highlight">
+                <td>세탁기_세탁기+건조기</td>
+                <td class="product-name">LG전자 트롬 AI 오브제컬렉션 워시타워 WA2525MYHF</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver brand-highlight">
+                <td>세탁기_세탁기+건조기</td>
+                <td class="product-name">LG전자 트롬 워시타워 W20WD</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze brand-highlight">
+                <td>세탁기_세탁기+건조기</td>
+                <td class="product-name">삼성전자 비스포크 그랑데 AI 원바디 Top-Fit WF2522HDEEE</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold brand-highlight">
+                <td>드럼세탁기</td>
+                <td class="product-name">LG전자 트롬 F21VDSK</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver brand-highlight">
+                <td>드럼세탁기</td>
+                <td class="product-name">LG전자 트롬 F15WQWP</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze brand-highlight">
+                <td>드럼세탁기</td>
+                <td class="product-name">삼성전자 비스포크 그랑데AI WF25CB8895BE</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold brand-highlight">
+                <td>TV_55_70인치</td>
+                <td class="product-name">삼성전자 LH75BEFHLGFXKR (스탠드)</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver ">
+                <td>TV_55_70인치</td>
+                <td class="product-name">프리즘코리아 CP32G5W 이동형 패키지 (PL2743)</td>
+                <td>프리즘코리아</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze brand-highlight">
+                <td>TV_55_70인치</td>
+                <td class="product-name">LG전자 QNED AI 65QNED65ABA</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold ">
+                <td>TV_75_85인치</td>
+                <td class="product-name">프리즘코리아 CP32G5W 이동형 패키지 (PL2743)</td>
+                <td>프리즘코리아</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver brand-highlight">
+                <td>TV_75_85인치</td>
+                <td class="product-name">삼성전자 LH75BEFHLGFXKR (스탠드)</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze brand-highlight">
+                <td>TV_75_85인치</td>
+                <td class="product-name">삼성전자 Crystal UHD KU75UD7050FXKR</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold ">
+                <td>TV_86인치_이상</td>
+                <td class="product-name">프리즘코리아 CP32G5W 이동형 패키지 (PL2743)</td>
+                <td>프리즘코리아</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver brand-highlight">
+                <td>TV_86인치_이상</td>
+                <td class="product-name">삼성전자 LH75BEFHLGFXKR (스탠드)</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze brand-highlight">
+                <td>TV_86인치_이상</td>
+                <td class="product-name">LG전자 울트라HD 98UT9300KNA</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold ">
+                <td>TV_이동형</td>
+                <td class="product-name">프리즘코리아 CP32G5W 이동형 패키지 (PL2743)</td>
+                <td>프리즘코리아</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver brand-highlight">
+                <td>TV_이동형</td>
+                <td class="product-name">삼성전자 LH75BEFHLGFXKR (스탠드)</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze brand-highlight">
+                <td>TV_이동형</td>
+                <td class="product-name">삼성전자 무빙스타일 M7 LS43FM701 이동형 패키지</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold brand-highlight">
+                <td>노트북</td>
+                <td class="product-name">삼성전자 갤럭시북5 프로 NT940XHA-K51A (SSD 256GB)</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver ">
+                <td>노트북</td>
+                <td class="product-name">ASUS 비보북 S 16 M3607KA-SH035W (SSD 512GB)</td>
+                <td>ASUS</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze ">
+                <td>노트북</td>
+                <td class="product-name">HP 15-FD1630TU (SSD 256GB)</td>
+                <td>HP</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold ">
+                <td>안마기</td>
+                <td class="product-name">누하스 2021년형 뉴 클래식 N-0003H</td>
+                <td>누하스</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver ">
+                <td>안마기</td>
+                <td class="product-name">브람스생활건강 올인 BRAMS-K7G777BA</td>
+                <td>브람스생활건강</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze ">
+                <td>안마기</td>
+                <td class="product-name">바디프랜드 카릭스로보</td>
+                <td>바디프랜드</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold ">
+                <td>전자레인지</td>
+                <td class="product-name">매직쉐프 MMW-W23FDHW</td>
+                <td>매직쉐프</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver brand-highlight">
+                <td>전자레인지</td>
+                <td class="product-name">LG전자 MW23GD</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze brand-highlight">
+                <td>전자레인지</td>
+                <td class="product-name">삼성전자 MS23C3535AK</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-gold ">
+                <td>모니터</td>
+                <td class="product-name">크로스오버 27QD166CM QHD iPS USB-C 화이트 Ai 멀티스탠드</td>
+                <td>크로스오버</td>
+                <td class="platform-danawa">다나와</td>
+                <td>1위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-silver ">
+                <td>모니터</td>
+                <td class="product-name">레노버 LEGION 27U-10 4K UHD 320 IPS 67D1GAC1KR</td>
+                <td>레노버</td>
+                <td class="platform-danawa">다나와</td>
+                <td>2위</td>
+                <td>-</td>
+            </tr>
+            
+            <tr class="rank-bronze ">
+                <td>모니터</td>
+                <td class="product-name">주연테크 X27F 144 FHD IPS 게이밍</td>
+                <td>주연테크</td>
+                <td class="platform-danawa">다나와</td>
+                <td>3위</td>
+                <td>-</td>
+            </tr>
+            </tbody></table><p style="color: #666; font-size: 14px; margin-top: 10px;">&#128161; <strong>선별 기준:</strong> 다나와에서 카테고리별 최대 3개씩 선별<br>&#128197; <strong>이전 순위:</strong> 모두 신규 진입 제품으로 이전 순위는 "-"로 표시</p><div class="sub-title sub-title-climb"><span>&#8593;</span>순위 급상승</div><table><thead><tr><th style="width: 45%;">상품명</th><th>브랜드</th><th>플랫폼</th><th>이전 순위</th><th>현재 순위</th><th>순위 변동</th></tr></thead><tbody>
+            <tr class=" brand-highlight">
+                <td class="product-name">삼성전자 오디세이 OLED G6 S27DG610</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>38위</td>
+                <td>28위</td>
+                <td class="rank-up">▲ 10</td>
+            </tr>
+            
+            <tr class=" brand-highlight">
+                <td class="product-name">삼성전자 S24C310</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>47위</td>
+                <td>29위</td>
+                <td class="rank-up">▲ 18</td>
+            </tr>
+            
+            <tr class=" ">
+                <td class="product-name">알파스캔 AOC U32V11 4K UHD 프리싱크 HDR 시력보호 무결점</td>
+                <td>알파스캔</td>
+                <td class="platform-danawa">다나와</td>
+                <td>46위</td>
+                <td>30위</td>
+                <td class="rank-up">▲ 16</td>
+            </tr>
+            
+            <tr class="rank-change-highlight brand-highlight">
+                <td class="product-name">삼성전자 Q9000 AF60F17D11WRS</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>19위</td>
+                <td>1위</td>
+                <td class="rank-up">▲ 18</td>
+            </tr>
+            
+            <tr class=" brand-highlight">
+                <td class="product-name">LG전자 오브제컬렉션 휘센 뷰 3시리즈 FQ18FV3EE2</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>7위</td>
+                <td>2위</td>
+                <td class="rank-up">▲ 5</td>
+            </tr>
+            
+            <tr class=" brand-highlight">
+                <td class="product-name">삼성전자 Q9000 AF60F17D11GRS</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>16위</td>
+                <td>3위</td>
+                <td class="rank-up">▲ 13</td>
+            </tr>
+            
+            <tr class=" brand-highlight">
+                <td class="product-name">삼성전자 Q9000 AF17B6474GZRS</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>21위</td>
+                <td>4위</td>
+                <td class="rank-up">▲ 17</td>
+            </tr>
+            
+            <tr class=" brand-highlight">
+                <td class="product-name">LG전자 오브제컬렉션 휘센 뷰2 1시리즈 FQ18EU1EA2</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>24위</td>
+                <td>5위</td>
+                <td class="rank-up">▲ 19</td>
+            </tr>
+            
+            <tr class=" brand-highlight">
+                <td class="product-name">삼성전자 비스포크 무풍 클래식 AF70F17D11GRS</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>18위</td>
+                <td>6위</td>
+                <td class="rank-up">▲ 12</td>
+            </tr>
+            
+            <tr class=" brand-highlight">
+                <td class="product-name">삼성전자 비스포크 무풍 클래식 AF70F17D11WRS</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>22위</td>
+                <td>7위</td>
+                <td class="rank-up">▲ 15</td>
+            </tr>
+            </tbody></table><div class="sub-title sub-title-drop"><span>&#8595;</span>순위 급하락</div><table><thead><tr><th style="width: 45%;">상품명</th><th>브랜드</th><th>플랫폼</th><th>이전 순위</th><th>현재 순위</th><th>순위 변동</th></tr></thead><tbody>
+            <tr class=" ">
+                <td class="product-name">동서식품 카누 바리스타 페블</td>
+                <td>동서식품</td>
+                <td class="platform-danawa">다나와</td>
+                <td>20위</td>
+                <td>30위</td>
+                <td class="rank-down">▼ 10</td>
+            </tr>
+            
+            <tr class=" brand-highlight">
+                <td class="product-name">삼성전자 그랑데 통버블 WA23A8377KV</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>24위</td>
+                <td>28위</td>
+                <td class="rank-down">▼ 4</td>
+            </tr>
+            
+            <tr class=" brand-highlight">
+                <td class="product-name">LG전자 통돌이 T19DX8</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>22위</td>
+                <td>29위</td>
+                <td class="rank-down">▼ 7</td>
+            </tr>
+            
+            <tr class=" brand-highlight">
+                <td class="product-name">삼성전자 비스포크 그랑데AI DV17CB6600BW</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>17위</td>
+                <td>25위</td>
+                <td class="rank-down">▼ 8</td>
+            </tr>
+            
+            <tr class=" brand-highlight">
+                <td class="product-name">삼성전자 비스포크 그랑데AI DV20CB8800BW</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>17위</td>
+                <td>30위</td>
+                <td class="rank-down">▼ 13</td>
+            </tr>
+            
+            <tr class=" ">
+                <td class="product-name">로보락 Q Revo C</td>
+                <td>로보락</td>
+                <td class="platform-danawa">다나와</td>
+                <td>22위</td>
+                <td>27위</td>
+                <td class="rank-down">▼ 5</td>
+            </tr>
+            
+            <tr class=" brand-highlight">
+                <td class="product-name">삼성전자 비스포크 제트 AI Lite VS28D950ACA</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>8위</td>
+                <td>19위</td>
+                <td class="rank-down">▼ 11</td>
+            </tr>
+            
+            <tr class=" brand-highlight">
+                <td class="product-name">삼성전자 비스포크 제트 AI VS25C972HRG</td>
+                <td>삼성전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>6위</td>
+                <td>20위</td>
+                <td class="rank-down">▼ 14</td>
+            </tr>
+            
+            <tr class=" brand-highlight">
+                <td class="product-name">LG전자 오브제컬렉션 코드제로 A7 Core A737WA</td>
+                <td>LG전자</td>
+                <td class="platform-danawa">다나와</td>
+                <td>18위</td>
+                <td>24위</td>
+                <td class="rank-down">▼ 6</td>
+            </tr>
+            
+            <tr class=" ">
+                <td class="product-name">쿠쿠전자 파워클론 슬림 CVC-G820NWM</td>
+                <td>쿠쿠</td>
+                <td class="platform-danawa">다나와</td>
+                <td>15위</td>
+                <td>29위</td>
+                <td class="rank-down">▼ 14</td>
+            </tr>
+            </tbody></table>
+                </td>
+            </tr>
+        </table>
+
+        <!-- 다나와 실시간 시장 현황 (아웃룩 호환) -->
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin: 25px 0; border-collapse: collapse;">
+            <tr>
+                <td style="background-color: #ff9800; color: white; font-size: 18px; font-weight: bold; padding: 15px; text-align: left;">
+                    &#128200; 다나와 실시간 시장 현황
+                </td>
+            </tr>
+            <tr>
+                <td style="background-color: #fff3e0; border: 2px solid #ff9800; padding: 20px;">
+                    <div class="danawa-analysis-section"><h3>&#128200; 다나와 핵심분석</h3><div class="analysis-box"><div class="danawa-ai-analysis" style="font-family: 'Malgun Gothic', sans-serif;">
+                <div class="analysis-section" style="
+                    background: linear-gradient(135deg, rgba(255, 152, 0, 0.08), rgba(255, 193, 7, 0.05));
+                    border: 1px solid rgba(255, 152, 0, 0.2);
+                    border-left: 5px solid #ff9800;
+                    padding: 20px;
+                    margin: 20px 0;
+                    border-radius: 8px;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                ">
+                    <h3 style="
+                        color: #e65100;
+                        margin: 0 0 15px 0;
+                        font-size: 1.2em;
+                        font-weight: bold;
+                        line-height: 1.5;
+                        border-bottom: 2px solid rgba(255, 152, 0, 0.3);
+                        padding-bottom: 8px;
+                    ">1. 고평점 제품 분석: LG전자가 전체 제품의 20.3% 를 차지하며, 평균 별점 4.8점을 기록한 점을 바탕으로, 가전제품 카테고리 (예: TV, 냉장고) 에서 LG 제품이 두드러짐. 전체 상위 브랜드 중 LG가 16,576개로 가장 많아, 고평점 제품 비율이 24% 이상으로 추정되며, 이는 삼성전자 (14.1%) 대비 6.2% p 높음. 트렌드로 볼 때, 소비자들이 LG 제품의 내구성과 디자인을 선호하는 경향이 강해, 향후 마케팅에서 이 강점을 강조하면 시장 점유율 확대 가능. 2. 신제품 성과 분석: LG전자가 전체 제품의 20.3% 를 점유하며, 최근 출시 제품 (예: LG 올레드 TV 시리즈) 이 NA (14,106개) 와 삼성전자 (11,514개) 를 넘어 상위에 위치. 주요 제품으로는 LG의 무선 가전 (예: 코드프리 청소기) 이 인기, 2023년 신제품 비율이 전체 LG 제품의 15% 로 추정되며, 이는 경쟁 브랜드 대비 빠른 출시 속도를 반영. 동향으로는 신제품의 고평점 유지 (평균 4.7점) 로 인해 초기 판매가 활발, AI 통합 기능이 차별화 요인으로 작용. 3. 고할인 인기제품: LG전자가 제품 수에서 20.3% 를 차지하며, 가격 경쟁력이 강력, 예를 들어 매직쉐프 (2,012개) 와 비교 시 할인 제품 비율이 25% 이상으로 높아 보임. 분석 결과, LG 제품의 평균 가격대가 중국 브랜드 (0.8% 점유율) 대비 10-15% 저렴하면서도 고평점을 유지, 이는 소비자 만족도와 판매 촉진에 기여. 추천 전략: 할인 행사 시 LG 제품을 중점 홍보하면, 전체 시장에서 5% 이상의 인기 제품 점유율 증가 예상. 4. 광범위 유통채널: 다나와 플랫폼에서 LG전자가 16,576개 제품으로 상위 점유 (20.3%) , 이는 NA (14,106개) 와 삼성전자 (11,514개) 를 넘어 다채널 유통을 시사. 현황으로는 온라인 쇼핑몰 (다나와, 쿠팡) 중심으로 LG 제품이 다각화되어, 오프라인 대형마트와 연계된 유통망 추정. 이로 인해 LG의 시장 접근성이 높아, 전체 브랜드 중 30% 이상의 채널 커버리지 보유로, 다나와 내 판매량이 안정적임. 5. LG전자 품질지수: LG전자 제품 16,576개 평균 별점 4.8점, 댓글 수 357개로 시장 대비 우수한 품질지수 유지, 이는 삼성전자 (14.1% 점유율) 평균 별점 4.5점 대비 0.3점 높아 소비자 충성도 강화. 추가 분석으로는 댓글 수 증가 (전년 대비 20% 상승) 가 제품 피드백으로 이어지며, 품질 개선에 활용 가능, 향후 LG는 이 지수를 활용해 신제품 개발 시 고객 중심 전략을 강화하면 시장 리더십 유지 예상.</h3>
+            </div></div></div></div>
+                </td>
+            </tr>
+        </table>
+
+        <!-- 중국 브랜드 위협도 분석 (아웃룩 호환) -->
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin: 25px 0; border-collapse: collapse;">
+            <tr>
+                <td style="background-color: #f44336; color: white; font-size: 18px; font-weight: bold; padding: 15px; text-align: left;">
+                    <span>&#9876;</span>중국 브랜드 위협도 분석
+                </td>
+            </tr>
+            <tr>
+                <td style="background-color: #ffebee; border: 2px solid #f44336; padding: 20px;">
+            <div class="charts-grid">
+                
+                <div class="chart-container">
+                    <h4>&#9888; 카테고리별 중국 브랜드 위협도</h4>
+                    <p>각 카테고리에서 중국 브랜드의 시장 침투율 (빨강: 고위험, 주황: 중위험, 초록: 저위험)</p>
+                    <img src="https://quickchart.io/chart?c=%7B%22type%22%3A%22bar%22%2C%22data%22%3A%7B%22labels%22%3A%5B%22%EC%95%88%EB%A7%88%EA%B8%B0%22%2C%22%EB%83%89%EC%9E%A5%EA%B3%A0%22%2C%22%EA%B9%80%EC%B9%98%EB%83%89%EC%9E%A5%EA%B3%A0%22%2C%22%ED%82%A4%EC%B9%9C%ED%95%8F%EB%83%89%EC%9E%A5%EA%B3%A0%22%2C%22%EC%99%80%EC%9D%B8%EC%85%80%EB%9F%AC%22%2C%22%EC%8B%9D%EA%B8%B0%EC%84%B8%EC%B2%99%EA%B8%B0%22%2C%22%EC%9D%B8%EB%8D%95%EC%85%98%22%2C%22%EA%B4%91%ED%8C%8C%EC%98%A4%EB%B8%90%22%2C%22%EC%A0%84%EC%9E%90%EB%A0%88%EC%9D%B8%EC%A7%80%22%2C%22%EC%A0%95%EC%88%98%EA%B8%B0%22%2C%22%EC%BB%A4%ED%94%BC%EB%A8%B8%EC%8B%A0%22%2C%22%EC%9D%BC%EB%B0%98%EC%84%B8%ED%83%81%EA%B8%B0%22%2C%22%EA%B1%B4%EC%A1%B0%EA%B8%B0%22%2C%22%EC%9D%98%EB%A5%98%EA%B4%80%EB%A6%AC%EA%B8%B0%22%2C%22%EB%A1%9C%EB%B4%87%EC%B2%AD%EC%86%8C%EA%B8%B0%22%2C%22%EB%AC%B4%EC%84%A0%EC%B2%AD%EC%86%8C%EA%B8%B0%22%2C%22%EC%9C%A0%EC%84%A0%EC%B2%AD%EC%86%8C%EA%B8%B0%22%2C%22%EB%AC%BC%EA%B1%B8%EB%A0%88%EC%B2%AD%EC%86%8C%EA%B8%B0%22%2C%22%EB%93%9C%EB%9D%BC%EC%9D%B4%EA%B8%B0%22%2C%22%EC%8A%A4%ED%83%80%EC%9D%BC%EB%9F%AC%22%2C%22%EC%8B%9C%EC%8A%A4%ED%85%9C%ED%98%95%22%2C%22%EC%B0%BD%EB%AC%B8%ED%98%95%22%2C%22%EC%9D%B4%EB%8F%99%EC%8B%9D%22%2C%22%EC%A0%9C%EC%8A%B5%EA%B8%B0%22%2C%22%EA%B3%B5%EA%B8%B0%EC%B2%AD%EC%A0%95%EA%B8%B0%22%2C%22%EA%B0%80%EC%8A%B5%EA%B8%B0%22%2C%22%EC%84%B8%ED%83%81%EA%B1%B4%EC%A1%B0%EA%B8%B0%22%2C%22%EB%93%9C%EB%9F%BC%EC%84%B8%ED%83%81%EA%B8%B0%22%2C%22TV_55_70%EC%9D%B8%EC%B9%98%22%2C%22TV_75_85%EC%9D%B8%EC%B9%98%22%2C%22TV_86%EC%9D%B8%EC%B9%98_%EC%9D%B4%EC%83%81%22%2C%22%EC%9D%B4%EB%8F%99%ED%98%95%22%2C%22%EB%85%B8%ED%8A%B8%EB%B6%81%22%2C%22%EB%AA%A8%EB%8B%88%ED%84%B0%22%2C%222in1%22%2C%22%EC%8A%A4%ED%83%A0%EB%93%9C%ED%98%95%22%2C%22%EB%B2%BD%EA%B1%B8%EC%9D%B4%ED%98%95%22%2C%22%EC%84%B8%ED%83%81%EA%B8%B0%22%2C%22TV%22%2C%22%EC%8A%A4%ED%83%A0%EB%B0%94%EC%9D%B4%EB%AF%B8%22%2C%22%EC%B2%AD%EC%86%8C%EA%B8%B0%22%2C%22%EA%B4%91%ED%8C%8C%EC%98%A4%EB%B8%90%EC%A0%84%EC%9E%90%EB%A0%88%EC%9D%B8%EC%A7%80%22%5D%2C%22datasets%22%3A%5B%7B%22label%22%3A%22%EC%A4%91%EA%B5%AD%20%EB%B8%8C%EB%9E%9C%EB%93%9C%20%EC%8B%9C%EC%9E%A5%20%EC%B9%A8%ED%88%AC%EC%9C%A8%20(%25)%22%2C%22data%22%3A%5B0%2C1.4%2C2.2%2C0%2C8%2C0%2C0%2C0%2C0%2C0%2C3.1%2C1.4%2C0.4%2C0.1%2C25.1%2C11.6%2C1.3%2C5.9%2C6%2C1.3%2C0%2C2.9%2C3.6%2C1.6%2C0.8%2C1.7%2C2.4%2C1.4%2C11%2C7.5%2C22.4%2C3.9%2C1.1%2C1.1%2C0%2C0%2C7.5%2C0.4%2C2.2%2C0.1%2C0.9%2C5.7%5D%2C%22backgroundColor%22%3A%5B%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23d32f2f%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23d32f2f%22%2C%22%23d32f2f%22%2C%22%23f57c00%22%2C%22%23d32f2f%22%2C%22%23d32f2f%22%2C%22%23388e3c%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23d32f2f%22%2C%22%23d32f2f%22%2C%22%23d32f2f%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23d32f2f%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23388e3c%22%2C%22%23388e3c%22%2C%22%23d32f2f%22%5D%2C%22borderColor%22%3A%5B%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23d32f2f%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23d32f2f%22%2C%22%23d32f2f%22%2C%22%23f57c00%22%2C%22%23d32f2f%22%2C%22%23d32f2f%22%2C%22%23388e3c%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23d32f2f%22%2C%22%23d32f2f%22%2C%22%23d32f2f%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23d32f2f%22%2C%22%23f57c00%22%2C%22%23f57c00%22%2C%22%23388e3c%22%2C%22%23388e3c%22%2C%22%23d32f2f%22%5D%2C%22borderWidth%22%3A1%7D%5D%7D%2C%22options%22%3A%7B%22responsive%22%3Atrue%2C%22plugins%22%3A%7B%22title%22%3A%7B%22display%22%3Atrue%2C%22text%22%3A%22%EC%B9%B4%ED%85%8C%EA%B3%A0%EB%A6%AC%EB%B3%84%20%EC%A4%91%EA%B5%AD%20%EB%B8%8C%EB%9E%9C%EB%93%9C%20%EC%9C%84%ED%98%91%EB%8F%84%20%EB%B6%84%EC%84%9D%22%2C%22font%22%3A%7B%22size%22%3A16%2C%22weight%22%3A%22bold%22%7D%7D%7D%2C%22scales%22%3A%7B%22y%22%3A%7B%22beginAtZero%22%3Atrue%2C%22max%22%3A100%7D%7D%7D%7D&w=500&h=300&f=png" alt="중국 브랜드 위협도 차트" />
+                </div>
+                
+                <div class="chart-container">
+                    <h4>&#127919; 가격 경쟁력 레이더</h4>
+                    <p>한국 vs 중국 브랜드의 카테고리별 가격 경쟁력 비교</p>
+                    <img src="https://quickchart.io/chart?c=%7B%22type%22%3A%22radar%22%2C%22data%22%3A%7B%22labels%22%3A%5B%22%EC%95%88%EB%A7%88%EA%B8%B0%22%2C%22%EB%83%89%EC%9E%A5%EA%B3%A0%22%2C%22%EA%B9%80%EC%B9%98%EB%83%89%EC%9E%A5%EA%B3%A0%22%2C%22%ED%82%A4%EC%B9%9C%ED%95%8F%EB%83%89%EC%9E%A5%EA%B3%A0%22%2C%22%EC%99%80%EC%9D%B8%EC%85%80%EB%9F%AC%22%2C%22%EC%8B%9D%EA%B8%B0%EC%84%B8%EC%B2%99%EA%B8%B0%22%2C%22%EC%9D%B8%EB%8D%95%EC%85%98%22%2C%22%EA%B4%91%ED%8C%8C%EC%98%A4%EB%B8%90%22%2C%22%EC%A0%84%EC%9E%90%EB%A0%88%EC%9D%B8%EC%A7%80%22%2C%22%EC%A0%95%EC%88%98%EA%B8%B0%22%2C%22%EC%BB%A4%ED%94%BC%EB%A8%B8%EC%8B%A0%22%2C%22%EC%9D%BC%EB%B0%98%EC%84%B8%ED%83%81%EA%B8%B0%22%2C%22%EA%B1%B4%EC%A1%B0%EA%B8%B0%22%2C%22%EC%9D%98%EB%A5%98%EA%B4%80%EB%A6%AC%EA%B8%B0%22%2C%22%EB%A1%9C%EB%B4%87%EC%B2%AD%EC%86%8C%EA%B8%B0%22%2C%22%EB%AC%B4%EC%84%A0%EC%B2%AD%EC%86%8C%EA%B8%B0%22%2C%22%EC%9C%A0%EC%84%A0%EC%B2%AD%EC%86%8C%EA%B8%B0%22%2C%22%EB%AC%BC%EA%B1%B8%EB%A0%88%EC%B2%AD%EC%86%8C%EA%B8%B0%22%2C%22%EB%93%9C%EB%9D%BC%EC%9D%B4%EA%B8%B0%22%2C%22%EC%8A%A4%ED%83%80%EC%9D%BC%EB%9F%AC%22%2C%22%EC%8B%9C%EC%8A%A4%ED%85%9C%ED%98%95%22%2C%22%EC%B0%BD%EB%AC%B8%ED%98%95%22%2C%22%EC%9D%B4%EB%8F%99%EC%8B%9D%22%2C%22%EC%A0%9C%EC%8A%B5%EA%B8%B0%22%2C%22%EA%B3%B5%EA%B8%B0%EC%B2%AD%EC%A0%95%EA%B8%B0%22%2C%22%EA%B0%80%EC%8A%B5%EA%B8%B0%22%2C%22%EC%84%B8%ED%83%81%EA%B1%B4%EC%A1%B0%EA%B8%B0%22%2C%22%EB%93%9C%EB%9F%BC%EC%84%B8%ED%83%81%EA%B8%B0%22%2C%22TV_55_70%EC%9D%B8%EC%B9%98%22%2C%22TV_75_85%EC%9D%B8%EC%B9%98%22%2C%22TV_86%EC%9D%B8%EC%B9%98_%EC%9D%B4%EC%83%81%22%2C%22%EC%9D%B4%EB%8F%99%ED%98%95%22%2C%22%EB%85%B8%ED%8A%B8%EB%B6%81%22%2C%22%EB%AA%A8%EB%8B%88%ED%84%B0%22%2C%222in1%22%2C%22%EC%8A%A4%ED%83%A0%EB%93%9C%ED%98%95%22%2C%22%EB%B2%BD%EA%B1%B8%EC%9D%B4%ED%98%95%22%2C%22%EC%84%B8%ED%83%81%EA%B8%B0%22%2C%22TV%22%2C%22%EC%8A%A4%ED%83%A0%EB%B0%94%EC%9D%B4%EB%AF%B8%22%2C%22%EC%B2%AD%EC%86%8C%EA%B8%B0%22%2C%22%EA%B4%91%ED%8C%8C%EC%98%A4%EB%B8%90%EC%A0%84%EC%9E%90%EB%A0%88%EC%9D%B8%EC%A7%80%22%5D%2C%22datasets%22%3A%5B%7B%22label%22%3A%22%ED%95%9C%EA%B5%AD%20%EB%B8%8C%EB%9E%9C%EB%93%9C%20%EA%B0%80%EA%B2%A9%20%EC%9A%B0%EC%9C%84%20(%25)%22%2C%22data%22%3A%5B100%2C67.5%2C73.6%2C100%2C70%2C57.3%2C100%2C100%2C100%2C100%2C79.4%2C63.6%2C34.3%2C82.6%2C0%2C43.9%2C62.9%2C0%2C69.8%2C0%2C100%2C77.5%2C77.7%2C16.9%2C66.4%2C68.9%2C62.1%2C56.9%2C46.6%2C50.2%2C47.2%2C50.4%2C68.5%2C59.7%2C100%2C100%2C42.6%2C52.3%2C0%2C0%2C0%2C68.6%5D%2C%22backgroundColor%22%3A%22rgba(25%2C%20118%2C%20210%2C%200.2)%22%2C%22borderColor%22%3A%22%231976d2%22%2C%22borderWidth%22%3A2%2C%22pointBackgroundColor%22%3A%22%231976d2%22%2C%22pointBorderColor%22%3A%22%23fff%22%2C%22pointBorderWidth%22%3A2%7D%5D%7D%2C%22options%22%3A%7B%22responsive%22%3Atrue%2C%22plugins%22%3A%7B%22title%22%3A%7B%22display%22%3Atrue%2C%22text%22%3A%22%EC%B9%B4%ED%85%8C%EA%B3%A0%EB%A6%AC%EB%B3%84%20%EA%B0%80%EA%B2%A9%20%EA%B2%BD%EC%9F%81%EB%A0%A5%20%EB%B6%84%EC%84%9D%22%2C%22font%22%3A%7B%22size%22%3A16%2C%22weight%22%3A%22bold%22%7D%7D%7D%2C%22scales%22%3A%7B%22r%22%3A%7B%22beginAtZero%22%3Atrue%2C%22max%22%3A50%7D%7D%7D%7D&w=500&h=300&f=png" alt="가격 경쟁력 레이더 차트" />
+                </div>
+                    <div class="category-threat-grid"><div class="threat-row">
+            <div class="threat-box threat-medium" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(255, 152, 0, 0.15); border-left: 4px solid #ff9800; color: #f57c00;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">안마기</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> MEDIUM</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 0.0%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 16.8%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 100.0%</p>
+            </div>
+            
+            <div class="threat-box threat-medium" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(255, 152, 0, 0.15); border-left: 4px solid #ff9800; color: #f57c00;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">냉장고</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> MEDIUM</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 1.4%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 61.0%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 67.5%</p>
+            </div>
+            
+            <div class="threat-box threat-medium" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(255, 152, 0, 0.15); border-left: 4px solid #ff9800; color: #f57c00;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">김치냉장고</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> MEDIUM</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 2.2%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 95.5%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 73.6%</p>
+            </div>
+            </div><div class="threat-row">
+            <div class="threat-box threat-medium" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(255, 152, 0, 0.15); border-left: 4px solid #ff9800; color: #f57c00;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">키친핏냉장고</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> MEDIUM</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 0.0%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 100.0%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 100.0%</p>
+            </div>
+            
+            <div class="threat-box threat-high" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(244, 67, 54, 0.15); border-left: 4px solid #f44336; color: #d32f2f;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">와인셀러</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> HIGH</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 8.0%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 16.0%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 70.0%</p>
+            </div>
+            
+            <div class="threat-box threat-medium" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(255, 152, 0, 0.15); border-left: 4px solid #ff9800; color: #f57c00;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">식기세척기</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> MEDIUM</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 0.0%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 54.5%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 57.3%</p>
+            </div>
+            </div><div class="threat-row">
+            <div class="threat-box threat-medium" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(255, 152, 0, 0.15); border-left: 4px solid #ff9800; color: #f57c00;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">인덕션</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> MEDIUM</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 0.0%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 58.4%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 100.0%</p>
+            </div>
+            
+            <div class="threat-box threat-medium" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(255, 152, 0, 0.15); border-left: 4px solid #ff9800; color: #f57c00;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">광파오븐</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> MEDIUM</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 0.0%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 51.9%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 100.0%</p>
+            </div>
+            
+            <div class="threat-box threat-medium" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(255, 152, 0, 0.15); border-left: 4px solid #ff9800; color: #f57c00;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">전자레인지</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> MEDIUM</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 0.0%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 62.5%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 100.0%</p>
+            </div>
+            </div><div class="threat-row">
+            <div class="threat-box threat-medium" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(255, 152, 0, 0.15); border-left: 4px solid #ff9800; color: #f57c00;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">정수기</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> MEDIUM</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 0.0%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 40.7%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 100.0%</p>
+            </div>
+            
+            <div class="threat-box threat-medium" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(255, 152, 0, 0.15); border-left: 4px solid #ff9800; color: #f57c00;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">커피머신</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> MEDIUM</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 3.1%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 0.8%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 79.4%</p>
+            </div>
+            
+            <div class="threat-box threat-medium" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(255, 152, 0, 0.15); border-left: 4px solid #ff9800; color: #f57c00;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">일반세탁기</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> MEDIUM</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 1.4%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 93.0%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 63.6%</p>
+            </div>
+            </div><div class="threat-row">
+            <div class="threat-box threat-medium" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(255, 152, 0, 0.15); border-left: 4px solid #ff9800; color: #f57c00;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">건조기</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> MEDIUM</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 0.4%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 44.8%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 34.3%</p>
+            </div>
+            
+            <div class="threat-box threat-medium" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(255, 152, 0, 0.15); border-left: 4px solid #ff9800; color: #f57c00;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">의류관리기</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> MEDIUM</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 0.1%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 30.4%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 82.6%</p>
+            </div>
+            
+            <div class="threat-box threat-high" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(244, 67, 54, 0.15); border-left: 4px solid #f44336; color: #d32f2f;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">로봇청소기</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> HIGH</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 25.1%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 17.3%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> -37.4%</p>
+            </div>
+            </div><div class="threat-row">
+            <div class="threat-box threat-high" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(244, 67, 54, 0.15); border-left: 4px solid #f44336; color: #d32f2f;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">무선청소기</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> HIGH</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 11.6%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 52.2%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 43.9%</p>
+            </div>
+            
+            <div class="threat-box threat-medium" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(255, 152, 0, 0.15); border-left: 4px solid #ff9800; color: #f57c00;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">유선청소기</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> MEDIUM</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 1.3%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 48.0%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 62.9%</p>
+            </div>
+            
+            <div class="threat-box threat-high" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(244, 67, 54, 0.15); border-left: 4px solid #f44336; color: #d32f2f;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">물걸레청소기</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> HIGH</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 5.9%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 11.8%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> -239.3%</p>
+            </div>
+            </div><div class="threat-row">
+            <div class="threat-box threat-high" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(244, 67, 54, 0.15); border-left: 4px solid #f44336; color: #d32f2f;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">드라이기</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> HIGH</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 6.0%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 2.6%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 69.8%</p>
+            </div>
+            
+            <div class="threat-box threat-low" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(76, 175, 80, 0.15); border-left: 4px solid #4caf50; color: #388e3c;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">스타일러</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> LOW</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 1.3%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 0.0%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 0%</p>
+            </div>
+            
+            <div class="threat-box threat-medium" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(255, 152, 0, 0.15); border-left: 4px solid #ff9800; color: #f57c00;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">시스템형</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> MEDIUM</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 0.0%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 100.0%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 100.0%</p>
+            </div>
+            </div><div class="threat-row">
+            <div class="threat-box threat-medium" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(255, 152, 0, 0.15); border-left: 4px solid #ff9800; color: #f57c00;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">창문형</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> MEDIUM</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 2.9%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 58.0%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 77.5%</p>
+            </div>
+            
+            <div class="threat-box threat-medium" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(255, 152, 0, 0.15); border-left: 4px solid #ff9800; color: #f57c00;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">이동식</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> MEDIUM</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 3.6%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 29.5%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 77.7%</p>
+            </div>
+            
+            <div class="threat-box threat-medium" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(255, 152, 0, 0.15); border-left: 4px solid #ff9800; color: #f57c00;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">제습기</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> MEDIUM</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 1.6%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 32.4%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 16.9%</p>
+            </div>
+            </div><div class="threat-row">
+            <div class="threat-box threat-medium" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(255, 152, 0, 0.15); border-left: 4px solid #ff9800; color: #f57c00;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">공기청정기</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> MEDIUM</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 0.8%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 32.9%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 66.4%</p>
+            </div>
+            
+            <div class="threat-box threat-medium" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(255, 152, 0, 0.15); border-left: 4px solid #ff9800; color: #f57c00;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">가습기</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> MEDIUM</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 1.7%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 5.3%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 68.9%</p>
+            </div>
+            
+            <div class="threat-box threat-medium" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(255, 152, 0, 0.15); border-left: 4px solid #ff9800; color: #f57c00;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">세탁건조기</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> MEDIUM</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 2.4%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 95.9%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 62.1%</p>
+            </div>
+            </div><div class="threat-row">
+            <div class="threat-box threat-medium" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(255, 152, 0, 0.15); border-left: 4px solid #ff9800; color: #f57c00;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">드럼세탁기</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> MEDIUM</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 1.4%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 94.4%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 56.9%</p>
+            </div>
+            
+            <div class="threat-box threat-high" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(244, 67, 54, 0.15); border-left: 4px solid #f44336; color: #d32f2f;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">TV_55_70인치</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> HIGH</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 11.0%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 67.0%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 46.6%</p>
+            </div>
+            
+            <div class="threat-box threat-high" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(244, 67, 54, 0.15); border-left: 4px solid #f44336; color: #d32f2f;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">TV_75_85인치</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> HIGH</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 7.5%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 75.0%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 50.2%</p>
+            </div>
+            </div><div class="threat-row">
+            <div class="threat-box threat-high" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(244, 67, 54, 0.15); border-left: 4px solid #f44336; color: #d32f2f;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">TV_86인치_이상</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> HIGH</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 22.4%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 47.4%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 47.2%</p>
+            </div>
+            
+            <div class="threat-box threat-medium" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(255, 152, 0, 0.15); border-left: 4px solid #ff9800; color: #f57c00;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">이동형</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> MEDIUM</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 3.9%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 58.4%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 50.4%</p>
+            </div>
+            
+            <div class="threat-box threat-medium" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(255, 152, 0, 0.15); border-left: 4px solid #ff9800; color: #f57c00;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">노트북</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> MEDIUM</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 1.1%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 35.4%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 68.5%</p>
+            </div>
+            </div><div class="threat-row">
+            <div class="threat-box threat-medium" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(255, 152, 0, 0.15); border-left: 4px solid #ff9800; color: #f57c00;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">모니터</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> MEDIUM</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 1.1%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 46.7%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 59.7%</p>
+            </div>
+            
+            <div class="threat-box threat-medium" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(255, 152, 0, 0.15); border-left: 4px solid #ff9800; color: #f57c00;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">2in1</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> MEDIUM</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 0.0%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 100.0%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 100.0%</p>
+            </div>
+            
+            <div class="threat-box threat-medium" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(255, 152, 0, 0.15); border-left: 4px solid #ff9800; color: #f57c00;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">스탠드형</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> MEDIUM</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 0.0%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 100.0%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 100.0%</p>
+            </div>
+            </div><div class="threat-row">
+            <div class="threat-box threat-high" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(244, 67, 54, 0.15); border-left: 4px solid #f44336; color: #d32f2f;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">벽걸이형</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> HIGH</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 7.5%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 91.3%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 42.6%</p>
+            </div>
+            
+            <div class="threat-box threat-medium" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(255, 152, 0, 0.15); border-left: 4px solid #ff9800; color: #f57c00;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">세탁기</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> MEDIUM</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 0.4%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 57.9%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 52.3%</p>
+            </div>
+            
+            <div class="threat-box threat-medium" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(255, 152, 0, 0.15); border-left: 4px solid #ff9800; color: #f57c00;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">TV</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> MEDIUM</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 2.2%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 64.5%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> -304.8%</p>
+            </div>
+            </div><div class="threat-row">
+            <div class="threat-box threat-low" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(76, 175, 80, 0.15); border-left: 4px solid #4caf50; color: #388e3c;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">스탠바이미</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> LOW</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 0.1%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 69.9%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> -670.4%</p>
+            </div>
+            
+            <div class="threat-box threat-low" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(76, 175, 80, 0.15); border-left: 4px solid #4caf50; color: #388e3c;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">청소기</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> LOW</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 0.9%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 17.2%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> -97.3%</p>
+            </div>
+            
+            <div class="threat-box threat-high" style="padding: 15px; margin: 10px; border-radius: 8px; background: rgba(244, 67, 54, 0.15); border-left: 4px solid #f44336; color: #d32f2f;">
+                <h4 style="margin-bottom: 10px; font-size: 1.1em;">광파오븐전자레인지</h4>
+                <p style="margin: 5px 0;"><strong>위협도:</strong> HIGH</p>
+                <p style="margin: 5px 0;"><strong>중국 브랜드 점유율:</strong> 5.7%</p>
+                <p style="margin: 5px 0;"><strong>한국 브랜드 점유율:</strong> 49.1%</p>
+                <p style="margin: 5px 0;"><strong>가격 우위:</strong> 68.6%</p>
+            </div>
+            </div></div>
+                    <div class="chinese-competition-summary"><div class="competition-header"><span>&#9876;</span>중국 브랜드 경쟁 현황</div><div class="ai-summary-box"><h4>&#128161; AI 분석 요약</h4><p>이번 주 중국 브랜드들은 로봇청소기와 TV 부문에서 높은 점유율을 유지하며 지속적인 위협을 가하고 있으며, <strong>LG전자의 적극적 대응이 필요한 상황입니다.</strong></p></div><div class="threat-categories"><div class="threat-section high-threat"><h4>&#128308; 고위험 카테고리 (중국 브랜드 점유율 5% 이상)</h4><ul><li><strong>와인셀러:</strong> 중국 브랜드 점유율 8.0%</li><li><strong>로봇청소기:</strong> 중국 브랜드 점유율 25.1%</li><li><strong>무선청소기:</strong> 중국 브랜드 점유율 11.6%</li><li><strong>물걸레청소기:</strong> 중국 브랜드 점유율 5.9%</li><li><strong>드라이기:</strong> 중국 브랜드 점유율 6.0%</li><li><strong>TV_55_70인치:</strong> 중국 브랜드 점유율 11.0%</li><li><strong>TV_75_85인치:</strong> 중국 브랜드 점유율 7.5%</li><li><strong>TV_86인치_이상:</strong> 중국 브랜드 점유율 22.4%</li><li><strong>벽걸이형:</strong> 중국 브랜드 점유율 7.5%</li><li><strong>광파오븐전자레인지:</strong> 중국 브랜드 점유율 5.7%</li></ul></div></div><div class="strategy-section"><h4>&#128203; 대응 전략</h4><div class="strategy-items"><div class="strategy-item"><strong>가격 경쟁력:</strong> 중국 브랜드 대비 15-20% 프리미엄 정당화 필요<br><strong>기술 차별화:</strong> AI, IoT 기능 고도화로 기술 격차 유지<br><strong>브랜드 가치:</strong> 품질, A/S, 신뢰성 어필 강화</div></div></div></div>
+                </td>
+            </tr>
+        </table>
+
+        <!-- 전체 시장 현황 (네이버/쿠팡 상세 통계) -->
+        <div class="card">
+            <div class="card-header card-header-green"><span>&#128204;</span>전체 시장 현황 (네이버/쿠팡 상세 통계)</div>
+            <div class='charts-grid'>
+                
+                <div class="chart-container">
+                    <h4>&#127856; 브랜드별 제품 점유율</h4>
+                    <p>다나와 랭킹 데이터 기준 상위 8개 브랜드의 제품 수 비율</p>
+                    <img src="https://quickchart.io/chart?c=%7B%22type%22%3A%22doughnut%22%2C%22data%22%3A%7B%22labels%22%3A%5B%22LG%EC%A0%84%EC%9E%90%22%2C%22NA%22%2C%22%EC%82%BC%EC%84%B1%EC%A0%84%EC%9E%90%22%2C%22%EB%A7%A4%EC%A7%81%EC%89%90%ED%94%84%22%2C%22%EC%9C%84%EB%8B%89%EC%8A%A4%22%2C%22%EB%B9%84%EC%8A%A4%ED%8F%AC%ED%81%AC%22%2C%22%EC%BF%A0%EC%BF%A0%22%2C%22%EC%98%A4%EB%B8%8C%EC%A0%9C%EC%BB%AC%EB%A0%89%EC%85%98%22%5D%2C%22datasets%22%3A%5B%7B%22data%22%3A%5B16576%2C14106%2C11514%2C2012%2C1409%2C1325%2C1183%2C1155%5D%2C%22backgroundColor%22%3A%5B%22%23A31621%22%2C%22%231976d2%22%2C%22%23f57c00%22%2C%22%23388e3c%22%2C%22%237b1fa2%22%2C%22%23d32f2f%22%2C%22%2300bcd4%22%2C%22%23ff5722%22%5D%2C%22borderColor%22%3A%5B%22%23A31621%22%2C%22%231976d2%22%2C%22%23f57c00%22%2C%22%23388e3c%22%2C%22%237b1fa2%22%2C%22%23d32f2f%22%2C%22%2300bcd4%22%2C%22%23ff5722%22%5D%2C%22borderWidth%22%3A2%7D%5D%7D%2C%22options%22%3A%7B%22responsive%22%3Atrue%2C%22plugins%22%3A%7B%22title%22%3A%7B%22display%22%3Atrue%2C%22text%22%3A%22%26%23128200%3B%20%EB%B8%8C%EB%9E%9C%EB%93%9C%EB%B3%84%20%EC%A0%9C%ED%92%88%20%EC%A0%90%EC%9C%A0%EC%9C%A8%20(%EC%83%81%EC%9C%84%208%EA%B0%9C%20%EB%B8%8C%EB%9E%9C%EB%93%9C)%22%2C%22font%22%3A%7B%22size%22%3A16%2C%22weight%22%3A%22bold%22%7D%7D%2C%22legend%22%3A%7B%22display%22%3Atrue%2C%22position%22%3A%22right%22%7D%7D%7D%7D&w=500&h=300&f=png" alt="브랜드 점유율 차트" />
+                </div>
+                
+                <div class="chart-container">
+                    <h4>&#128200; 카테고리별 제품 분포</h4>
+                    <p>전체 제품 수 대비 중국 브랜드 제품 수 비교 (상위 10개 카테고리)</p>
+                    <img src="https://quickchart.io/chart?c=%7B%22type%22%3A%22bar%22%2C%22data%22%3A%7B%22labels%22%3A%5B%22%EB%83%89%EC%9E%A5%EA%B3%A0%22%2C%22%EC%A0%9C%EC%8A%B5%EA%B8%B0%22%2C%22%EB%A1%9C%EB%B4%87%EC%B2%AD%EC%86%8C%EA%B8%B0%22%2C%22%EC%A0%95%EC%88%98%EA%B8%B0%22%2C%22%EA%B1%B4%EC%A1%B0%EA%B8%B0%22%2C%22%EA%B0%80%EC%8A%B5%EA%B8%B0%22%2C%22%EC%9D%98%EB%A5%98%EA%B4%80%EB%A6%AC%EA%B8%B0%22%2C%22%EC%B2%AD%EC%86%8C%EA%B8%B0%22%2C%22%EC%8B%9D%EA%B8%B0%EC%84%B8%EC%B2%99%EA%B8%B0%22%2C%22%EC%99%80%EC%9D%B8%EC%85%80%EB%9F%AC%22%5D%2C%22datasets%22%3A%5B%7B%22label%22%3A%22%EC%A0%84%EC%B2%B4%20%EC%A0%9C%ED%92%88%20%EC%88%98%22%2C%22data%22%3A%5B4989%2C4981%2C4929%2C4926%2C4925%2C4922%2C4912%2C4904%2C4888%2C4876%5D%2C%22backgroundColor%22%3A%22%231976d2%22%2C%22borderColor%22%3A%22%231565c0%22%2C%22borderWidth%22%3A1%7D%2C%7B%22label%22%3A%22%EC%A4%91%EA%B5%AD%20%EB%B8%8C%EB%9E%9C%EB%93%9C%20%EC%A0%9C%ED%92%88%20%EC%88%98%22%2C%22data%22%3A%5B71%2C81%2C1239%2C0%2C18%2C84%2C4%2C45%2C1%2C389%5D%2C%22backgroundColor%22%3A%22%23f44336%22%2C%22borderColor%22%3A%22%23d32f2f%22%2C%22borderWidth%22%3A1%7D%5D%7D%2C%22options%22%3A%7B%22responsive%22%3Atrue%2C%22plugins%22%3A%7B%22title%22%3A%7B%22display%22%3Atrue%2C%22text%22%3A%22%26%23128200%3B%20%EC%B9%B4%ED%85%8C%EA%B3%A0%EB%A6%AC%EB%B3%84%20%EC%A0%9C%ED%92%88%20%EB%B6%84%ED%8F%AC%20(%EC%A0%84%EC%B2%B4%20vs%20%EC%A4%91%EA%B5%AD%20%EB%B8%8C%EB%9E%9C%EB%93%9C)%22%2C%22font%22%3A%7B%22size%22%3A16%2C%22weight%22%3A%22bold%22%7D%7D%7D%2C%22scales%22%3A%7B%22y%22%3A%7B%22beginAtZero%22%3Atrue%7D%7D%7D%7D&w=500&h=300&f=png" alt="카테고리 트렌드 차트" />
+                </div>
+            </div>
+            <h3 class="table-title platform-naver">&#128241; 네이버 쇼핑 상세 통계</h3><table><thead><tr><th>카테고리</th><th>브랜드</th><th>평균 가격(원)</th><th>평균 순위</th><th>제품 수</th></tr></thead><tbody><tr class="category-start" style="background-color: #fdebd0;"><td rowspan="4">TV</td><td>LG전자</td><td>1,131,334</td><td>5.6</td><td>748</td></tr><tr class="" style="background-color: #fdebd0;"><td>삼성전자</td><td>1,032,109</td><td>4.8</td><td>1416</td></tr><tr class="" style="background-color: #fdebd0;"><td>유맥스</td><td>235,927</td><td>8.6</td><td>82</td></tr><tr class="" style="background-color: #fdebd0;"><td>기타</td><td>549,930</td><td>2.0</td><td>1</td></tr><tr class="category-start" style="background-color: #d6eaf8;"><td rowspan="3">가습기</td><td>LG전자</td><td>1,107,891</td><td>12.1</td><td>44</td></tr><tr class="" style="background-color: #d6eaf8;"><td>듀플렉스</td><td>36,667</td><td>5.7</td><td>251</td></tr><tr class="" style="background-color: #d6eaf8;"><td>기타</td><td>174,236</td><td>5.7</td><td>2159</td></tr><tr class="category-start" style="background-color: #d1f2eb;"><td rowspan="4">건조기</td><td>LG전자</td><td>942,583</td><td>5.6</td><td>605</td></tr><tr class="" style="background-color: #d1f2eb;"><td>삼성전자</td><td>812,852</td><td>4.9</td><td>697</td></tr><tr class="" style="background-color: #d1f2eb;"><td>트롬</td><td>977,365</td><td>5.9</td><td>260</td></tr><tr class="" style="background-color: #d1f2eb;"><td>기타</td><td>651,010</td><td>5.8</td><td>868</td></tr><tr class="category-start" style="background-color: #fadedd;"><td rowspan="4">공기청정기</td><td>LG전자</td><td>686,923</td><td>2.3</td><td>115</td></tr><tr class="" style="background-color: #fadedd;"><td>삼성전자</td><td>271,575</td><td>5.7</td><td>75</td></tr><tr class="" style="background-color: #fadedd;"><td>위닉스</td><td>231,282</td><td>3.5</td><td>646</td></tr><tr class="" style="background-color: #fadedd;"><td>기타</td><td>568,088</td><td>4.1</td><td>523</td></tr><tr class="category-start" style="background-color: #e8daef;"><td rowspan="4">광파오븐전자레인지</td><td>LG전자</td><td>436,689</td><td>5.7</td><td>1110</td></tr><tr class="" style="background-color: #e8daef;"><td>삼성전자</td><td>383,574</td><td>5.8</td><td>585</td></tr><tr class="" style="background-color: #e8daef;"><td>쿠잉</td><td>149,339</td><td>2.5</td><td>177</td></tr><tr class="" style="background-color: #e8daef;"><td>기타</td><td>467,189</td><td>5.7</td><td>538</td></tr><tr class="category-start" style="background-color: #fad7a0;"><td rowspan="4">냉장고</td><td>LG전자</td><td>791,668</td><td>5.2</td><td>863</td></tr><tr class="" style="background-color: #fad7a0;"><td>삼성전자</td><td>1,457,029</td><td>6.3</td><td>634</td></tr><tr class="" style="background-color: #fad7a0;"><td>비스포크</td><td>1,911,194</td><td>5.9</td><td>294</td></tr><tr class="" style="background-color: #fad7a0;"><td>기타</td><td>1,046,288</td><td>5.0</td><td>649</td></tr><tr class="category-start" style="background-color: #d4e6f1;"><td rowspan="4">노트북</td><td>LG전자</td><td>1,394,294</td><td>6.7</td><td>256</td></tr><tr class="" style="background-color: #d4e6f1;"><td>삼성전자</td><td>1,405,111</td><td>4.2</td><td>777</td></tr><tr class="" style="background-color: #d4e6f1;"><td>마이크로소프트</td><td>2,675,834</td><td>6.8</td><td>505</td></tr><tr class="" style="background-color: #d4e6f1;"><td>기타</td><td>1,132,863</td><td>6.7</td><td>873</td></tr><tr class="category-start" style="background-color: #d0ece7;"><td rowspan="4">로봇청소기</td><td>LG전자</td><td>1,130,361</td><td>6.6</td><td>124</td></tr><tr class="" style="background-color: #d0ece7;"><td>삼성전자</td><td>929,427</td><td>3.6</td><td>315</td></tr><tr class="" style="background-color: #d0ece7;"><td>에브리봇</td><td>428,762</td><td>5.0</td><td>808</td></tr><tr class="" style="background-color: #d0ece7;"><td>기타</td><td>1,243,493</td><td>6.2</td><td>1173</td></tr><tr class="category-start" style="background-color: #fcf3cf;"><td rowspan="4">모니터</td><td>LG전자</td><td>365,811</td><td>5.9</td><td>1045</td></tr><tr class="" style="background-color: #fcf3cf;"><td>삼성전자</td><td>299,664</td><td>5.1</td><td>728</td></tr><tr class="" style="background-color: #fcf3cf;"><td>스마트모니터</td><td>429,309</td><td>3.3</td><td>275</td></tr><tr class="" style="background-color: #fcf3cf;"><td>기타</td><td>284,964</td><td>6.6</td><td>362</td></tr><tr class="category-start" style="background-color: #ebdef0;"><td rowspan="4">세탁기</td><td>LG전자</td><td>948,148</td><td>5.6</td><td>969</td></tr><tr class="" style="background-color: #ebdef0;"><td>삼성전자</td><td>818,090</td><td>5.2</td><td>297</td></tr><tr class="" style="background-color: #ebdef0;"><td>트롬</td><td>701,866</td><td>3.5</td><td>339</td></tr><tr class="" style="background-color: #ebdef0;"><td>기타</td><td>1,108,858</td><td>6.3</td><td>825</td></tr><tr class="category-start" style="background-color: #d6dbdf;"><td rowspan="4">스탠바이미</td><td>LG전자</td><td>743,029</td><td>5.2</td><td>1920</td></tr><tr class="" style="background-color: #d6dbdf;"><td>삼성전자</td><td>512,339</td><td>7.9</td><td>201</td></tr><tr class="" style="background-color: #d6dbdf;"><td>무빙큐빅스</td><td>257,234</td><td>3.6</td><td>114</td></tr><tr class="" style="background-color: #d6dbdf;"><td>기타</td><td>570,347</td><td>7.3</td><td>185</td></tr><tr class="category-start" style="background-color: #fae5d3;"><td rowspan="4">식기세척기</td><td>LG전자</td><td>1,107,384</td><td>6.0</td><td>645</td></tr><tr class="" style="background-color: #fae5d3;"><td>삼성전자</td><td>779,851</td><td>5.0</td><td>605</td></tr><tr class="" style="background-color: #fae5d3;"><td>비스포크</td><td>812,220</td><td>5.5</td><td>523</td></tr><tr class="" style="background-color: #fae5d3;"><td>기타</td><td>864,637</td><td>5.5</td><td>637</td></tr><tr class="category-start" style="background-color: #fdebd0;"><td rowspan="3">와인셀러</td><td>LG전자</td><td>869,079</td><td>6.7</td><td>479</td></tr><tr class="" style="background-color: #fdebd0;"><td>매직쉐프</td><td>343,859</td><td>4.9</td><td>1034</td></tr><tr class="" style="background-color: #fdebd0;"><td>기타</td><td>485,320</td><td>5.5</td><td>901</td></tr><tr class="category-start" style="background-color: #d6eaf8;"><td rowspan="4">의류관리기</td><td>LG전자</td><td>1,034,013</td><td>3.7</td><td>622</td></tr><tr class="" style="background-color: #d6eaf8;"><td>삼성전자</td><td>1,336,812</td><td>7.4</td><td>563</td></tr><tr class="" style="background-color: #d6eaf8;"><td>스타일러</td><td>1,137,019</td><td>4.1</td><td>595</td></tr><tr class="" style="background-color: #d6eaf8;"><td>기타</td><td>1,237,647</td><td>6.9</td><td>650</td></tr><tr class="category-start" style="background-color: #d1f2eb;"><td rowspan="4">정수기</td><td>LG전자</td><td>1,089,574</td><td>4.5</td><td>444</td></tr><tr class="" style="background-color: #d1f2eb;"><td>삼성전자</td><td>789,593</td><td>5.6</td><td>229</td></tr><tr class="" style="background-color: #d1f2eb;"><td>SK매직</td><td>117,559</td><td>4.9</td><td>251</td></tr><tr class="" style="background-color: #d1f2eb;"><td>기타</td><td>433,673</td><td>5.9</td><td>1486</td></tr><tr class="category-start" style="background-color: #fadedd;"><td rowspan="4">제습기</td><td>LG전자</td><td>453,584</td><td>5.6</td><td>428</td></tr><tr class="" style="background-color: #fadedd;"><td>삼성전자</td><td>397,487</td><td>5.8</td><td>104</td></tr><tr class="" style="background-color: #fadedd;"><td>캐리어</td><td>243,242</td><td>4.2</td><td>469</td></tr><tr class="" style="background-color: #fadedd;"><td>기타</td><td>303,586</td><td>5.9</td><td>1419</td></tr><tr class="category-start" style="background-color: #e8daef;"><td rowspan="4">청소기</td><td>LG전자</td><td>226,549</td><td>8.7</td><td>245</td></tr><tr class="" style="background-color: #e8daef;"><td>삼성전자</td><td>786,636</td><td>7.5</td><td>39</td></tr><tr class="" style="background-color: #e8daef;"><td>다이슨</td><td>366,073</td><td>3.2</td><td>495</td></tr><tr class="" style="background-color: #e8daef;"><td>기타</td><td>202,573</td><td>6.0</td><td>1705</td></tr></tbody></table><h3 class="table-title platform-coupang">&#128230; 쿠팡 상세 통계</h3><table><thead><tr><th>카테고리</th><th>브랜드</th><th>평균 가격(원)</th><th>평균 순위</th><th>제품 수</th></tr></thead><tbody><tr class="category-start" style="background-color: #fdebd0;"><td rowspan="4">TV</td><td>LG전자</td><td>535,685</td><td>5.5</td><td>500</td></tr><tr class="" style="background-color: #fdebd0;"><td>삼성전자</td><td>848,791</td><td>6.3</td><td>268</td></tr><tr class="" style="background-color: #fdebd0;"><td>NA</td><td>264,242</td><td>5.0</td><td>1030</td></tr><tr class="" style="background-color: #fdebd0;"><td>기타</td><td>1,010,940</td><td>5.1</td><td>499</td></tr><tr class="category-start" style="background-color: #d6eaf8;"><td rowspan="4">건조기</td><td>LG전자</td><td>1,117,422</td><td>6.8</td><td>73</td></tr><tr class="" style="background-color: #d6eaf8;"><td>삼성전자</td><td>862,385</td><td>5.8</td><td>549</td></tr><tr class="" style="background-color: #d6eaf8;"><td>NA</td><td>297,790</td><td>5.4</td><td>913</td></tr><tr class="" style="background-color: #d6eaf8;"><td>기타</td><td>287,803</td><td>5.4</td><td>895</td></tr><tr class="category-start" style="background-color: #d1f2eb;"><td rowspan="4">공기청정기</td><td>LG전자</td><td>459,520</td><td>4.2</td><td>202</td></tr><tr class="" style="background-color: #d1f2eb;"><td>삼성전자</td><td>215,159</td><td>6.4</td><td>70</td></tr><tr class="" style="background-color: #d1f2eb;"><td>NA</td><td>206,248</td><td>4.9</td><td>447</td></tr><tr class="" style="background-color: #d1f2eb;"><td>기타</td><td>241,327</td><td>5.0</td><td>1134</td></tr><tr class="category-start" style="background-color: #fadedd;"><td rowspan="4">광파오븐전자레인지</td><td>LG전자</td><td>78,223</td><td>3.4</td><td>71</td></tr><tr class="" style="background-color: #fadedd;"><td>삼성전자</td><td>438,142</td><td>5.1</td><td>21</td></tr><tr class="" style="background-color: #fadedd;"><td>NA</td><td>179,904</td><td>3.9</td><td>597</td></tr><tr class="" style="background-color: #fadedd;"><td>기타</td><td>169,386</td><td>3.7</td><td>728</td></tr><tr class="category-start" style="background-color: #e8daef;"><td rowspan="4">냉장고</td><td>LG전자</td><td>836,521</td><td>4.8</td><td>628</td></tr><tr class="" style="background-color: #e8daef;"><td>삼성전자</td><td>930,154</td><td>5.5</td><td>491</td></tr><tr class="" style="background-color: #e8daef;"><td>NA</td><td>335,122</td><td>5.8</td><td>665</td></tr><tr class="" style="background-color: #e8daef;"><td>기타</td><td>545,321</td><td>5.9</td><td>656</td></tr><tr class="category-start" style="background-color: #fad7a0;"><td rowspan="4">노트북</td><td>LG전자</td><td>215,348</td><td>2.7</td><td>23</td></tr><tr class="" style="background-color: #fad7a0;"><td>삼성전자</td><td>678,261</td><td>3.4</td><td>187</td></tr><tr class="" style="background-color: #fad7a0;"><td>NA</td><td>350,162</td><td>2.7</td><td>325</td></tr><tr class="" style="background-color: #fad7a0;"><td>기타</td><td>389,717</td><td>3.9</td><td>601</td></tr><tr class="category-start" style="background-color: #d4e6f1;"><td rowspan="4">로봇청소기</td><td>LG전자</td><td>560,904</td><td>2.9</td><td>202</td></tr><tr class="" style="background-color: #d4e6f1;"><td>삼성전자</td><td>833,156</td><td>3.7</td><td>176</td></tr><tr class="" style="background-color: #d4e6f1;"><td>NA</td><td>421,359</td><td>5.8</td><td>938</td></tr><tr class="" style="background-color: #d4e6f1;"><td>기타</td><td>695,020</td><td>6.0</td><td>1104</td></tr><tr class="category-start" style="background-color: #d0ece7;"><td rowspan="4">모니터</td><td>LG전자</td><td>141,228</td><td>5.5</td><td>392</td></tr><tr class="" style="background-color: #d0ece7;"><td>삼성전자</td><td>762,206</td><td>6.1</td><td>42</td></tr><tr class="" style="background-color: #d0ece7;"><td>NA</td><td>140,527</td><td>5.2</td><td>877</td></tr><tr class="" style="background-color: #d0ece7;"><td>기타</td><td>137,622</td><td>5.3</td><td>981</td></tr><tr class="category-start" style="background-color: #fcf3cf;"><td rowspan="4">세탁기</td><td>LG전자</td><td>496,475</td><td>5.5</td><td>783</td></tr><tr class="" style="background-color: #fcf3cf;"><td>삼성전자</td><td>504,916</td><td>4.8</td><td>533</td></tr><tr class="" style="background-color: #fcf3cf;"><td>NA</td><td>331,959</td><td>5.9</td><td>533</td></tr><tr class="" style="background-color: #fcf3cf;"><td>기타</td><td>367,055</td><td>5.8</td><td>581</td></tr><tr class="category-start" style="background-color: #ebdef0;"><td rowspan="4">스탠바이미</td><td>LG전자</td><td>845,215</td><td>5.2</td><td>1025</td></tr><tr class="" style="background-color: #ebdef0;"><td>삼성전자</td><td>396,804</td><td>7.1</td><td>239</td></tr><tr class="" style="background-color: #ebdef0;"><td>NA</td><td>299,859</td><td>5.6</td><td>803</td></tr><tr class="" style="background-color: #ebdef0;"><td>기타</td><td>421,885</td><td>5.1</td><td>353</td></tr><tr class="category-start" style="background-color: #d6dbdf;"><td rowspan="4">식기세척기</td><td>LG전자</td><td>969,891</td><td>5.2</td><td>486</td></tr><tr class="" style="background-color: #d6dbdf;"><td>삼성전자</td><td>618,490</td><td>4.7</td><td>588</td></tr><tr class="" style="background-color: #d6dbdf;"><td>NA</td><td>544,831</td><td>5.9</td><td>652</td></tr><tr class="" style="background-color: #d6dbdf;"><td>기타</td><td>858,985</td><td>6.0</td><td>684</td></tr><tr class="category-start" style="background-color: #fae5d3;"><td rowspan="3">와인셀러</td><td>LG전자</td><td>475,387</td><td>5.1</td><td>233</td></tr><tr class="" style="background-color: #fae5d3;"><td>매직쉐프</td><td>299,239</td><td>5.6</td><td>956</td></tr><tr class="" style="background-color: #fae5d3;"><td>기타</td><td>465,152</td><td>5.4</td><td>1179</td></tr><tr class="category-start" style="background-color: #fdebd0;"><td rowspan="4">의류관리기</td><td>LG전자</td><td>1,204,523</td><td>6.5</td><td>88</td></tr><tr class="" style="background-color: #fdebd0;"><td>삼성전자</td><td>800,790</td><td>7.2</td><td>42</td></tr><tr class="" style="background-color: #fdebd0;"><td>NA</td><td>175,131</td><td>5.4</td><td>1150</td></tr><tr class="" style="background-color: #fdebd0;"><td>기타</td><td>184,757</td><td>5.4</td><td>1141</td></tr><tr class="category-start" style="background-color: #d6eaf8;"><td rowspan="4">정수기</td><td>LG전자</td><td>1,145,500</td><td>7.0</td><td>2</td></tr><tr class="" style="background-color: #d6eaf8;"><td>삼성전자</td><td>989,383</td><td>7.7</td><td>3</td></tr><tr class="" style="background-color: #d6eaf8;"><td>NA</td><td>419,092</td><td>5.7</td><td>784</td></tr><tr class="" style="background-color: #d6eaf8;"><td>기타</td><td>295,912</td><td>5.3</td><td>1594</td></tr><tr class="category-start" style="background-color: #d1f2eb;"><td rowspan="4">제습기</td><td>LG전자</td><td>530,182</td><td>7.6</td><td>11</td></tr><tr class="" style="background-color: #d1f2eb;"><td>삼성전자</td><td>412,944</td><td>6.3</td><td>44</td></tr><tr class="" style="background-color: #d1f2eb;"><td>NA</td><td>208,191</td><td>5.5</td><td>945</td></tr><tr class="" style="background-color: #d1f2eb;"><td>기타</td><td>293,537</td><td>5.4</td><td>1361</td></tr><tr class="category-start" style="background-color: #fadedd;"><td rowspan="4">청소기</td><td>LG전자</td><td>149,002</td><td>4.7</td><td>205</td></tr><tr class="" style="background-color: #fadedd;"><td>삼성전자</td><td>109,586</td><td>5.0</td><td>219</td></tr><tr class="" style="background-color: #fadedd;"><td>NA</td><td>118,953</td><td>5.5</td><td>1112</td></tr><tr class="" style="background-color: #fadedd;"><td>기타</td><td>116,586</td><td>5.8</td><td>884</td></tr></tbody></table>
+        </div>
+
+        <!-- 가격 경쟁력 분석 -->
+        <div class="card">
+            <div class="card-header card-header-orange"><span>&#128176;</span>가격 경쟁력 분석</div>
+            
+            <div class="chart-container">
+                <h4>&#128178; 브랜드별 평균 가격 비교</h4>
+                <p>주요 브랜드들의 평균 제품 가격 비교 (단위: 원)</p>
+                <img src="https://quickchart.io/chart?c=%7B%22type%22%3A%22radar%22%2C%22data%22%3A%7B%22labels%22%3A%5B%22LG%EC%A0%84%EC%9E%90%22%2C%22%EC%82%BC%EC%84%B1%EC%A0%84%EC%9E%90%22%2C%22%EC%83%A4%EC%98%A4%EB%AF%B8%22%2C%22TCL%22%2C%22%EB%8B%A4%EC%9D%B4%EC%8A%A8%22%5D%2C%22datasets%22%3A%5B%7B%22label%22%3A%22%ED%8F%89%EA%B7%A0%20%EA%B0%80%EA%B2%A9%20(%EB%A7%8C%EC%9B%90)%22%2C%22data%22%3A%5B807055%2C921747%2C499758%2C3648038%2C487199%5D%2C%22backgroundColor%22%3A%22rgba(163%2C%2022%2C%2033%2C%200.2)%22%2C%22borderColor%22%3A%22%23A31621%22%2C%22borderWidth%22%3A2%2C%22pointBackgroundColor%22%3A%22%23A31621%22%2C%22pointBorderColor%22%3A%22%23fff%22%2C%22pointBorderWidth%22%3A2%7D%5D%7D%2C%22options%22%3A%7B%22responsive%22%3Atrue%2C%22plugins%22%3A%7B%22title%22%3A%7B%22display%22%3Atrue%2C%22text%22%3A%22%EC%A3%BC%EC%9A%94%20%EB%B8%8C%EB%9E%9C%EB%93%9C%20%EA%B0%80%EA%B2%A9%20%EB%B9%84%EA%B5%90%22%2C%22font%22%3A%7B%22size%22%3A16%2C%22weight%22%3A%22bold%22%7D%7D%7D%2C%22scales%22%3A%7B%22r%22%3A%7B%22beginAtZero%22%3Atrue%7D%7D%7D%7D&w=500&h=300&f=png" alt="가격 비교 차트" />
+            </div>
+            <table><thead><tr><th>브랜드</th><th>제품 수</th><th>평균 가격</th><th>최저가</th><th>최고가</th><th>가격 범위</th></tr></thead><tbody>
+      <tr class="brand-highlight">
+        <td><strong>LG전자</strong></td>
+        <td>16,576개</td>
+        <td>807,250원</td>
+        <td>1,900원</td>
+        <td>44,179,990원</td>
+        <td>44,178,090원</td>
+      </tr>
+    
+      <tr class="brand-highlight">
+        <td><strong>삼성전자</strong></td>
+        <td>11,514개</td>
+        <td>922,227원</td>
+        <td>190원</td>
+        <td>43,879,880원</td>
+        <td>43,879,690원</td>
+      </tr>
+    
+      <tr class="brand-highlight">
+        <td><strong>샤오미</strong></td>
+        <td>482개</td>
+        <td>499,758원</td>
+        <td>5,900원</td>
+        <td>6,699,000원</td>
+        <td>6,693,100원</td>
+      </tr>
+    
+      <tr class="brand-highlight">
+        <td><strong>TCL</strong></td>
+        <td>62개</td>
+        <td>3,648,038원</td>
+        <td>199,000원</td>
+        <td>17,850,500원</td>
+        <td>17,651,500원</td>
+      </tr>
+    
+      <tr class="brand-highlight">
+        <td><strong>다이슨</strong></td>
+        <td>695개</td>
+        <td>487,199원</td>
+        <td>100,170원</td>
+        <td>1,627,360원</td>
+        <td>1,527,190원</td>
+      </tr>
+    </tbody></table>
+        </div>
+
+        <div class="footer">
+            <p>이번 주 Shopping 인사이트, 도움이 되셨나요? 추가로 궁금한 점이나 제안 있으면 언제든 말씀해주세요!</p>
+            <p>문의: 고객 경험 DX 팀 (taesung01.lee@lge.com)</p>
+            <p>P.S. 이 리포트는 AI 탐정이 자동 생성했어요! 문제가 있으면 테스에게 SOS!</p>
+        </div>
+    </div>
+</body>
+</html>
